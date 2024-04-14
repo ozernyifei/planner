@@ -43,7 +43,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             SfCalendar(
   controller: _calendarController,
   view: CalendarView.month,
-  firstDayOfWeek: 1, // Начало недели: понедельник
+  firstDayOfWeek: 1, 
   monthViewSettings: MonthViewSettings(
     numberOfWeeksInView: 5,
     showAgenda: true,
