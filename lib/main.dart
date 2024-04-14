@@ -72,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           NavigationDestination(
             icon: Badge(
-              label: Text('2'),
               child: Icon(Icons.settings),
             ),
             label: 'Настройки',

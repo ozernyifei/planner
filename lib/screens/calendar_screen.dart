@@ -37,15 +37,35 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Calendar Screen'),
-      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SfCalendar(
-              controller: _calendarController,
-            ),
+  controller: _calendarController,
+  view: CalendarView.month,
+  firstDayOfWeek: 1, // Начало недели: понедельник
+  monthViewSettings: MonthViewSettings(
+    numberOfWeeksInView: 5,
+    showAgenda: true,
+    // appointmentTextStyle: TextStyle(
+    //   color: Colors.black,
+    //   fontSize: 16,
+    // ),
+  ),
+  // headerTitleBuilder: (date) {
+  //   return Text(
+  //     '${date.year} - ${date.month}',
+  //     style: TextStyle(fontSize: 18),
+  //   );
+  // },
+  // sources: [
+  //   // Ваш источник данных (CalendarDataSource)
+  // ],
+  onLongPress: (details) {
+    // Обработка долгого нажатия на ячейку
+    print('Долгое нажатие на: ${details.date}');
+  },
+),
             // ElevatedButton(
             //   onPressed: () => print('Button pressed'),
             //   child: const Text('Добавить событие'),
