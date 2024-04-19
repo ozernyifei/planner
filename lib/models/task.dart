@@ -8,7 +8,6 @@ class Task {
     required this.priorityId,
     required this.statusId,
     required this.tagId,
-    this.reminderId,
   });
 
   factory Task.fromMap(Map<String, dynamic> map) {
@@ -20,7 +19,6 @@ class Task {
       priorityId: map['priorityId'],
       statusId: map['statusId'],
       tagId: map['tagId'],
-      reminderId: map['reminderId'],
     );
   }
   int id;
@@ -30,7 +28,6 @@ class Task {
   int priorityId;
   int statusId;
   int tagId;
-  int? reminderId;
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,7 +38,6 @@ class Task {
       'priorityId': priorityId,
       'statusId': statusId,
       'tagId': tagId,
-      'reminderId': reminderId,
     };
   }
 }
