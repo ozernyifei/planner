@@ -2,19 +2,19 @@ class Period {
   Period({
     required this.id,
     required this.title,
-    required this.description   
+    this.description = '',
   });
 
   factory Period.fromMap(Map<String, dynamic> map) {
     return Period(
       id: map['id'] ?? 0,
       title: map['title'],
-      description: map['description'],
+      description: map['description'] ?? '',
     );
   }
   int id;
   String title;
-  String description;
+  String? description;
 
   Map<String, dynamic> toMap() {
     return {

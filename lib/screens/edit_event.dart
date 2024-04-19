@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:sqflite/sqflite.dart';
+import '../classes/db_helper.dart';
 import '../models/task.dart'; 
 
 class EditTaskScreen extends StatefulWidget { 
@@ -26,7 +27,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     if (widget.task != null) {
       _titleController.text = widget.task!.title;
       _descriptionController.text = widget.task!.description!;
-      _dueDateController.text = widget.task!.dueDate.toIso8601String();
+      _dueDateController.text = widget.task!.dueDate!.toIso8601String();
     }
   }
 

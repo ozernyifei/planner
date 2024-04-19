@@ -4,10 +4,10 @@ class Task {
     required this.id,
     required this.title,
     this.description = '',
-    required this.dueDate,
+    this.dueDate,
     required this.priorityId,
     required this.statusId,
-    required this.tagId,
+    this.tagId,
   });
 
   factory Task.fromMap(Map<String, dynamic> map) {
@@ -15,26 +15,26 @@ class Task {
       id: map['id'] ?? 0,
       title: map['title'],
       description: map['description'] ?? '',
-      dueDate: DateTime.parse(map['dueDate']),
+      dueDate: DateTime.parse(map['dueDate']), 
       priorityId: map['priorityId'],
       statusId: map['statusId'],
       tagId: map['tagId'],
     );
   }
-  int id;
+  final int id;
   String title;
   String? description;
-  DateTime dueDate;
+  DateTime? dueDate;
   int priorityId;
   int statusId;
-  int tagId;
+  int? tagId;
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'title': title,
       'description': description,
-      'dueDate': dueDate.toIso8601String(),
+      'dueDate': dueDate?.toIso8601String(),
       'priorityId': priorityId,
       'statusId': statusId,
       'tagId': tagId,
