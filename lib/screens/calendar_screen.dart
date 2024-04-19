@@ -44,7 +44,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   controller: _calendarController,
   view: CalendarView.month,
   firstDayOfWeek: 1, 
-  monthViewSettings: MonthViewSettings(
+  monthViewSettings: const MonthViewSettings(
     numberOfWeeksInView: 5,
     showAgenda: true,
     // appointmentTextStyle: TextStyle(
