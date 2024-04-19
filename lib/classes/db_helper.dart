@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseHelper {
-  static const String _databaseName = 'task_manager.db';
+class DbHelper {
+  static const String _databaseName = 'planner.db';
 
   Database? _database;
 
