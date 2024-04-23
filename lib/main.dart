@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planner/screens/calendar_screen.dart';
-import 'package:planner/screens/task_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
+import 'package:planner/screens/task_screen.dart';
 
 
 void main() async {

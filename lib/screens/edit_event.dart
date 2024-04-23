@@ -33,7 +33,26 @@ class _EditEventScreenState extends State<EditEventScreen> {
 
   // Сохранение задачи
   Future<void> _saveTask() async {
-    // ... логика сохранения задачи в базе данных
+    
+    final task = widget.task ?? Task(
+      id: 0, // New task has ID 0 initially
+      title: '',
+      description: '',
+      dueDate: null,
+      priorityId: 1, // Example default priority
+      statusId: 1, // Example default status
+    );
+
+    // Update task properties from screen inputs
+    task.title = _titleController.text;
+    task.description = _descriptionController.text;
+    task.dueDate = _dueDateController.text == null
+        ? null
+        : DateTime.parse(_dueDateController.text);
+
+         await task.addTaskToDatabase(database);
+
+    Navigator.pop(context);
   }
 
   @override

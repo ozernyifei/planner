@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:planner/screens/edit_event.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 
 class Event {
@@ -35,10 +35,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
           // Нажмите на FAB, чтобы перейти к edit_task.dart
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditEventScreen()),
+            MaterialPageRoute(builder: (context) => const EditEventScreen()),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       body: SingleChildScrollView(
         child: Column(

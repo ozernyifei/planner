@@ -1,16 +1,17 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:planner/models/task.dart';
 
 class DbHelper {
-  static const String _databaseName = 'planner.db';
+  static String get _databaseName => 'planner.db';
 
   Database? _database;
 
   Future<Database> get database async {
-    _database ??= await _initDatabase();
+    _database ??= await initDatabase();
     return _database!;
   }
 
-  Future<Database> _initDatabase() async {
+  Future<Database> initDatabase() async {
     final database = await openDatabase(_databaseName);
 
     await _createPlannerDatabase(database);
@@ -85,4 +86,6 @@ class DbHelper {
     )
   ''');
   // ... методы для добавления, получения, обновления и удаления данных из каждой таблицы
+
+
 }
