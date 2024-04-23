@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calendar App'),
+        title: const Text('Студент+'),
       ),
       body: screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(

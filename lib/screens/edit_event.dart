@@ -6,15 +6,15 @@ import 'package:sqflite/sqflite.dart';
 import '../classes/db_helper.dart';
 import '../models/task.dart'; 
 
-class EditTaskScreen extends StatefulWidget { 
-  const EditTaskScreen({super.key, this.task});
+class EditEventScreen extends StatefulWidget { 
+  const EditEventScreen({super.key, this.task});
   final Task? task;
 
   @override
-  _EditTaskScreenState createState() => _EditTaskScreenState();
+  _EditEventScreenState createState() => _EditEventScreenState();
 }
 
-class _EditTaskScreenState extends State<EditTaskScreen> {
+class _EditEventScreenState extends State<EditEventScreen> {
   // Контроллеры для полей ввода
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -40,7 +40,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Создать/Редактировать задачу'),
+        title: const Text('Создать/Редактировать событие'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -76,7 +76,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     });
                   }
                 },
-                decoration: const InputDecoration(labelText: 'Дата выполнения'),
+                decoration: const InputDecoration(labelText: 'Дата события'),
               ),
               // Кнопка сохранения задачи
               ElevatedButton(

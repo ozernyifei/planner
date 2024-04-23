@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:planner/screens/edit_event.dart';
 
-// class CalendarScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Center(
-//       child: Text('Календарь'),
-//     );
-//   }
-// }
 
 class Event {
   Event(this.title);
@@ -37,6 +30,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Нажмите на FAB, чтобы перейти к edit_task.dart
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditEventScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -64,12 +67,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
   onLongPress: (details) {
     // Обработка долгого нажатия на ячейку
     print('Долгое нажатие на: ${details.date}');
-  },
-),
-            // ElevatedButton(
-            //   onPressed: () => print('Button pressed'),
-            //   child: const Text('Добавить событие'),
-            // ),
+             },
+            ),
           ],
         ),
       ),

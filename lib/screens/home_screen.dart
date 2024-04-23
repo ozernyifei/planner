@@ -1,16 +1,40 @@
 import 'package:flutter/material.dart';
 
+import 'package:planner/screens/edit_task.dart';
 
 // class HomeScreen extends StatefulWidget {
 //   @override
 //   State<HomeScreen> createState() => _HomeScreenState();
 // }
 
-class HomeScreen extends StatelessWidget {
+
+class HomeScreen extends StatefulWidget {
+
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Главная'),
+    return Scaffold(
+      // ... AppBar ...
+      body: SingleChildScrollView(
+        // ... ваш список задач ...
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Нажмите на FAB, чтобы перейти к edit_task.dart
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => EditTaskScreen()),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
