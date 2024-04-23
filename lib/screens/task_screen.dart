@@ -2,44 +2,39 @@ import 'package:flutter/material.dart';
 
 import 'package:planner/screens/edit_task.dart';
 
-// class HomeScreen extends StatefulWidget {
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
 
-
-class HomeScreen extends StatefulWidget {
+class TaskScreen extends StatefulWidget {
 
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _TaskScreenState createState() => _TaskScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _TaskScreenState extends State<TaskScreen> {
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // ... AppBar ...
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         // ... ваш список задач ...
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           // Нажмите на FAB, чтобы перейти к edit_task.dart
-          Navigator.push(
+          await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => EditTaskScreen()),
+            MaterialPageRoute(builder: (context) => const EditTaskScreen()),
           );
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-// class _HomeScreenState extends State<HomeScreen> {
+// class _TaskScreenState extends State<TaskScreen> {
 //   int currentPageIndex = 0;
 
 //   @override
@@ -74,14 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
 //         ],
 //       ),
 //       body: <Widget>[
-//         /// Home page
+//         /// Task page
 //         Card(
 //           shadowColor: Colors.transparent,
 //           margin: const EdgeInsets.all(8),
 //           child: SizedBox.expand(
 //             child: Center(
 //               child: Text(
-//                 'Home page',
+//                 'Task page',
 //                 style: theme.textTheme.titleLarge,
 //               ),
 //             ),
@@ -156,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //     );
 //   }
 // }
-// class _HomeScreenState extends State<HomeScreen> {
+// class _TaskScreenState extends State<TaskScreen> {
 //   int _selectedIndex = 0;
 //   late Color _iconColor;
 

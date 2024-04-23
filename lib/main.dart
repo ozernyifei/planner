@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planner/screens/calendar_screen.dart';
-import 'package:planner/screens/home_screen.dart';
+import 'package:planner/screens/task_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
 
 
@@ -35,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final screens = [
-      HomeScreen(),
+      TaskScreen(),
       CalendarScreen(),
       SettingsScreen(),
     ];

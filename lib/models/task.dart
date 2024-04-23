@@ -1,3 +1,5 @@
+import 'package:sqflite/sqflite.dart';
+
 class Task {
 
   Task({
@@ -40,4 +42,23 @@ class Task {
       'tagId': tagId,
     };
   }
+
+  Future<void> addTaskToDatabase(Database database) async {
+    await database.insert(
+      'task', 
+      toMap(), 
+    );
+  }
+
+  static Future<List<Task>> getTasksFromDatabase(Database database) async {
+
+    final tasksData = await database.query('task'); 
+    final tasks = <Task>[];
+    for (final row in tasksData) {
+      tasks.add(Task.fromMap(row));
+    }
+
+    return tasks;
+  }
+
 }
