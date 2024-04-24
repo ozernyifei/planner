@@ -33,9 +33,28 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   // Сохранение задачи
   Future<void> _saveTask() async {
-    // ... логика сохранения задачи в базе данных
-  }
+    final dbHelper = DbHelper();
+    final database =  await dbHelper.database;
+    
+    final task = widget.task ?? Task(
+      title: '',
+      description: '',
+      dueDate: null,
+      priorityId: 1, // Example default priority
+      statusId: 1, // Example default status
+    );
 
+    // Update task properties from screen inputs
+    task.title = _titleController.text;
+    task.description = _descriptionController.text;
+    task.dueDate = _dueDateController.text == null
+        ? null
+        : DateTime.parse(_dueDateController.text);
+
+         await task.addTaskToDatabase(database);
+
+    Navigator.pop(context);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

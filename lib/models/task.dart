@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 class Task {
 
   Task({
-    required this.id,
+    this.id,
     required this.title,
     this.description = '',
     this.dueDate,
@@ -23,7 +23,7 @@ class Task {
       tagId: map['tagId'],
     );
   }
-  final int id;
+  final int? id;
   String title;
   String? description;
   DateTime? dueDate;

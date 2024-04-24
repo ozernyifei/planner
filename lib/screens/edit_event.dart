@@ -32,27 +32,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
   }
 
   // Сохранение задачи
-  Future<void> _saveTask() async {
-    
-    final task = widget.task ?? Task(
-      id: 0, // New task has ID 0 initially
-      title: '',
-      description: '',
-      dueDate: null,
-      priorityId: 1, // Example default priority
-      statusId: 1, // Example default status
-    );
+  Future<void> _saveEvent() async {
 
-    // Update task properties from screen inputs
-    task.title = _titleController.text;
-    task.description = _descriptionController.text;
-    task.dueDate = _dueDateController.text == null
-        ? null
-        : DateTime.parse(_dueDateController.text);
-
-         await task.addTaskToDatabase(database);
-
-    Navigator.pop(context);
   }
 
   @override
@@ -99,7 +80,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
               ),
               // Кнопка сохранения задачи
               ElevatedButton(
-                onPressed: _saveTask,
+                onPressed: _saveEvent,
                 child: const Text('Сохранить'),
               ),
             ],

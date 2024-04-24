@@ -2,13 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/models/task.dart';
 import 'package:planner/screens/edit_task.dart';
-import 'package:sqflite/sqflite.dart';
-
-
-
-
-
-
 
 
 class TaskScreen extends StatefulWidget {
@@ -21,24 +14,26 @@ class _TaskScreenState extends State<TaskScreen> {
 
   final DbHelper dbHelper = DbHelper();
 
+  List<Task> tasks = [];
+
   Future<List<Task>> _loadTasks() async {
   
   final database = await dbHelper.database;
-  final tasksData = await database.query('tasks'); // Замените 'tasks' на имя вашей таблицы задач
+  final tasksData = await database.query('task'); 
   final tasks = <Task>[];
   for (final row in tasksData) {
-    tasks.add(Task.fromMap(row)); // Предполагая, что у вас есть метод fromMap в классе Task
+    tasks.add(Task.fromMap(row)); 
   }
   return tasks;
 }
 
   @override
-  Future<void> initState() async {
+  void initState()  {
     super.initState();
-    await dbHelper.initDatabase(); // Инициализация базы данных
-    await _loadTasks().then((loadedTasks) {
+     dbHelper.initDatabase(); 
+     _loadTasks().then((loadedTasks) {
       setState(() {
-        final tasks = loadedTasks;
+        tasks = loadedTasks;
       });
     });
   }
@@ -47,12 +42,18 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // ... AppBar ...
-      body: const SingleChildScrollView(
-        // ... ваш список задач ...
-      ),
+       body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          final task = tasks[index];
+          return ListTile(
+            title: Text(task.title),
+            // ... другие элементы ListTile ...
+          );
+        },
+       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Нажмите на FAB, чтобы перейти к edit_task.dart
           await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EditTaskScreen()),
