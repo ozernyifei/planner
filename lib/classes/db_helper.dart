@@ -14,10 +14,9 @@ class DbHelper {
   final dbPath = await getDatabasesPath();
   final databasePath = '$dbPath/$_databaseName';
 
-    print('kekdont');
-    final database = await openDatabase(databasePath);
-    await _createPlannerDatabase(database);
-    return database;
+  final database = await openDatabase(databasePath);
+  await _createPlannerDatabase(database);
+  return database;
 
 
   }
@@ -30,7 +29,7 @@ class DbHelper {
     await _createTablePeriod(database);
     await _createTablePriority(database);
     await _createTableStatus(database);
-    // await _createTableSubtask(database);
+    await _createTableSubtask(database);
     await _createTableTask(database);
     await _createTableTaskTag(database);
     await _createTableTag(database);
@@ -76,14 +75,14 @@ class DbHelper {
       tagId INTEGER REFERENCES tag(id)
     )
   ''');
-  // Future<void> _createTableSubtask(Database database) async => database.execute('''
-  //   CREATE TABLE IF NOT EXISTS Subtask (
-  //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-  //     title TEXT NOT NULL,
-  //     description TEXT,
-  //     dueDate DATETIME,
-  //   )
-  // ''');
+  Future<void> _createTableSubtask(Database database) async => database.execute('''
+    CREATE TABLE IF NOT EXISTS subtask (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      description TEXT,
+      dueDate DATETIME
+    )
+  ''');
   Future<void> _createTableTag(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS priority (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
