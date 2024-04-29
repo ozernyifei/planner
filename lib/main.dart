@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:planner/screens/calendar_screen.dart';
+import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
 import 'package:planner/screens/task_screen.dart';
 
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final screens = [
+      HomeScreen(),
       TaskScreen(),
       CalendarScreen(),
       SettingsScreen(),
@@ -56,9 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedIndex: _selectedIndex,
         destinations: const <Widget>[
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home_outlined),
             icon: Icon(Icons.home_outlined),
             label: 'Главная',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.task_alt_outlined),
+            icon: Icon(Icons.task_alt_outlined),
+            label: 'Задачи',
           ),
           NavigationDestination(
             icon: Badge(child: Icon(Icons.calendar_today)),

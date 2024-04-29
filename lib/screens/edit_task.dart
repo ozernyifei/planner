@@ -106,12 +106,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 },
                 decoration: const InputDecoration(labelText: 'Дата выполнения'),
               ),
-              TextField(
-                controller: _priorityContoller,
-                readOnly: true,
-                decoration: const InputDecoration(labelText: 'Приоритет'),
-              ),
-               Row(
+              Row(
               children: [
                 Radio(
                   value: 1,
