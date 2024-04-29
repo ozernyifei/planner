@@ -21,19 +21,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     super.initState();
-    _events[DateTime.now()] = [
-      Event('Событие 1'),
-      Event('Событие 2'),
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           // Нажмите на FAB, чтобы перейти к edit_task.dart
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EditEventScreen()),
           );

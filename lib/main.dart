@@ -4,7 +4,7 @@ import 'package:planner/screens/settings_screen.dart';
 import 'package:planner/screens/task_screen.dart';
 
 
-void main() async {
+void main() {
   runApp(const MainApp());
 }
 
@@ -16,7 +16,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'To-do list',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.amber,
       ),
       home: MyHomePage(),
     );

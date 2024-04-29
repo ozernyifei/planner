@@ -1,5 +1,4 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:planner/models/task.dart';
 
 class DbHelper {
   static String get _databaseName => 'planner.db';
@@ -22,6 +21,8 @@ class DbHelper {
 
 
   }
+
+  Future<void> deleteTask(Database database, int id) async => database.delete('task', where: 'id = ?', whereArgs: [id]);
 
 
 
