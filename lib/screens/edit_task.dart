@@ -24,7 +24,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dueDateController = TextEditingController();
-  final _priorityContoller = TextEditingController();
 
 
 
@@ -60,9 +59,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         ? null
         : DateTime.parse(_dueDateController.text);
 
-         await task.addTaskToDatabase(database);
-
-    Navigator.pop(context);
+    await task.addTaskToDatabase(database);
+    await database.close();
+    if (mounted) {
+      Navigator.pop(context);
+    }
+    
   }
   @override
   Widget build(BuildContext context) {

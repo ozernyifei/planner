@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner/screens/auth_screen.dart';
 import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
@@ -15,11 +16,15 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/auth',
+      routes: {
+        '/auth': (context) => AuthScreen(),
+        '/home': (context) => MyHomePage(),
+      },
       title: 'To-do list',
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: MyHomePage(),
     );
   }
 }

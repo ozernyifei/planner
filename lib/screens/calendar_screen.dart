@@ -16,7 +16,7 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final CalendarController _calendarController = CalendarController();
-  final Map<DateTime, List<Event>> _events = {};
+  //final Map<DateTime, List<Event>> _events = {};
 
   @override
   void initState() {
@@ -62,7 +62,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   // ],
   onLongPress: (details) {
     // Обработка долгого нажатия на ячейку
-    print('Долгое нажатие на: ${details.date}');
              },
             ),
           ],

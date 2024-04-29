@@ -34,7 +34,6 @@ class _TaskScreenState extends State<TaskScreen> {
   final database = await dbHelper.database;
   await dbHelper.deleteTask(database, taskId);
 
-  // Update the tasks list and rebuild the widget
   setState(() {
     tasks.removeWhere((task) => task.id == taskId);
   });
