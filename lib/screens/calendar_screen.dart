@@ -41,7 +41,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           children: [
             SfCalendar(
   controller: _calendarController,
-  view: CalendarView.month,
+  view: CalendarView.week,
   firstDayOfWeek: 1, 
   monthViewSettings: const MonthViewSettings(
     numberOfWeeksInView: 5,
