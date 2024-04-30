@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:planner/classes/user_service.dart';
 import 'package:planner/screens/reg_screen.dart';
+
 
 
 class AuthScreen extends StatefulWidget {
@@ -8,6 +10,17 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+
+  final _formKey = GlobalKey<FormState>(); // Form key for validation
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +38,41 @@ class _AuthScreenState extends State<AuthScreen> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
-            const TextField(
-              decoration: InputDecoration(
+            TextFormField(
+              decoration: const InputDecoration(
                 labelText: 'Логин',
                 hintText: 'Введите свой логин',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Введите имя пользователя';
+                }
+                return null;
+              }
             ),
             const SizedBox(height: 20),
-            const TextField(
+             TextFormField(
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Пароль',
                 hintText: 'Введите свой пароль',
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Введите пароль';
+                }
+                return null;
+              }
             ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
-                // Переход на HomeScreen()
-              await Navigator.pushReplacementNamed(context, '/home');
+                if (_formKey.currentState!.validate()) {
+                  await UserService.isUserLoggedIn(
+                    _usernameController.text,
+                    _passwordController.text); // Call the login function
+                }
+              
               },
               child: const Text('Войти'),
             ),
@@ -65,5 +94,5 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       ),
     );
-  } 
+  }
 }

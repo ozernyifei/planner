@@ -39,6 +39,7 @@ class DbHelper {
     //await _createTableTaskReminder(database);
   }
 
+  
   Future<void> _createTableUserData(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS user_data (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

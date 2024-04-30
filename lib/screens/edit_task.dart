@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, cascade_invocations
 
 import 'package:flutter/material.dart';
-import '../classes/db_helper.dart';
-import '../models/task.dart'; 
-
+import 'package:planner/classes/db_helper.dart';
+import 'package:planner/models/task.dart'; 
+import 'package:shared_preferences/shared_preferences.dart';
 class EditTaskScreen extends StatefulWidget { 
   const EditTaskScreen({super.key, this.task});
 
@@ -42,29 +42,51 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   // Сохранение задачи
   Future<void> _saveTask() async {
+    final prefs = await SharedPreferences.getInstance();
+    final username = prefs.getString('username');
+
+
+    if (username != null) {
+    // Look up user ID in SQLite database based on username
     final dbHelper = DbHelper();
-    final database =  await dbHelper.database;
-    
-    
-    final task = widget.task ?? Task(
-      title: '',
-      priorityId: 1, // Example default priority
-      statusId: 1, // Example default status
-    );
+    final database = await dbHelper.database;
 
-    // Update task properties from screen inputs
-    task.title = _titleController.text;
-    task.description = _descriptionController.text;
-    task.dueDate = _dueDateController.text == null
-        ? null
-        : DateTime.parse(_dueDateController.text);
+    final result = await database.query('users',
+        where: 'username = ?',
+        whereArgs: [username],
+        limit: 1);
+    if (result.isNotEmpty) {
+      // User ID found in SQLite database
+      final userId = result.first['id']! as int;
 
-    await task.addTaskToDatabase(database);
-    await database.close();
-    if (mounted) {
-      Navigator.pop(context);
+      // Proceed with saving the task
+      final task = widget.task ?? Task(
+        title: '',
+        priorityId: 1, // Example default priority
+        statusId: 1, // Example default status
+        userId: userId, // Add userId here
+      );
+
+      // Update task properties from screen inputs
+      task.title = _titleController.text;
+      task.description = _descriptionController.text;
+      task.dueDate = _dueDateController.text == null
+          ? null
+          : DateTime.parse(_dueDateController.text);
+
+      await task.addTaskToDatabase(database);
+      await database.close();
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } else {
+      // Handle the case where user ID cannot be found in SQLite
+      // (e.g., show an error message or prevent saving)
     }
-    
+  } else {
+    // Handle the case where username is not found in SharedPreferences
+    // (e.g., show an error message or prevent saving)
+  }
   }
   @override
   Widget build(BuildContext context) {
