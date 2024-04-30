@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static String get _databaseName => 'planner.db';
+  static String get _databaseName => 'taskPlanner.db';
 
   Database? _database;
 
@@ -22,19 +22,40 @@ class DbHelper {
   }
 
   Future<void> deleteTask(Database database, int id) async => database.delete('task', where: 'id = ?', whereArgs: [id]);
+  Future<void> deleteEvent(Database database, int id) async => database.delete('event', where: 'id = ?', whereArgs: [id]);
 
 
 
   Future<void> _createPlannerDatabase(Database database) async {
-    await _createTablePeriod(database);
+    // await _createTablePeriod(database);
     await _createTablePriority(database);
     await _createTableStatus(database);
     await _createTableSubtask(database);
     await _createTableTask(database);
     await _createTableTaskTag(database);
     await _createTableTag(database);
+    await _createTableUserData(database);
+    await _createTableUserLogin(database);
     //await _createTableTaskReminder(database);
   }
+
+  Future<void> _createTableUserData(Database database) async => database.execute('''
+    CREATE TABLE IF NOT EXISTS user_data (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      first_name TEXT NOT NULL,
+      last_name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      username TEXT UNIQUE NOT NULL,
+    )
+  ''');
+
+  Future<void> _createTableUserLogin(Database database) async => database.execute('''
+    CREATE TABLE IF NOT EXISTS user_login (
+      user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT UNIQUE NOT NULL,
+      password TEXT NOT NULL,
+    )
+  ''');
 
   Future<void> _createTableStatus(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS status (
@@ -50,15 +71,15 @@ class DbHelper {
       description TEXT
     )
   ''');
-  Future<void> _createTablePeriod(Database database) async => database.execute('''
-    CREATE TABLE IF NOT EXISTS status (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      description TEXT
-    )
-  ''');
+  // Future<void> _createTablePeriod(Database database) async => database.execute('''
+  //   CREATE TABLE IF NOT EXISTS status (
+  //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //     name TEXT NOT NULL,
+  //     description TEXT
+  //   )
+  // ''');
   Future<void> _createTableTaskTag(Database database) async => database.execute('''
-    CREATE TABLE IF NOT EXISTS taskTag (
+    CREATE TABLE IF NOT EXISTS task_tag (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       taskId INTEGER NOT NULL REFERENCES task(id),
       tagId INTEGER NOT NULL REFERENCES tag(id)
@@ -70,9 +91,11 @@ class DbHelper {
       title TEXT NOT NULL,
       description TEXT,
       dueDate DATETIME,
-      priorityId INTEGER NOT NULL REFERENCES priority(id),
-      statusId INTEGER NOT NULL REFERENCES status(id),
-      tagId INTEGER REFERENCES tag(id)
+      user_id INTEGER NOT NULL REFERENCES user_data(id)
+      priority_id INTEGER NOT NULL REFERENCES priority(id),
+      status_id INTEGER NOT NULL REFERENCES status(id),
+      tag_id INTEGER REFERENCES tag(id)
+      FOREIGN KEY (user_id) REFERENCES user_data(user_id) ON DELETE CASCADE
     )
   ''');
   Future<void> _createTableSubtask(Database database) async => database.execute('''
@@ -84,7 +107,7 @@ class DbHelper {
     )
   ''');
   Future<void> _createTableTag(Database database) async => database.execute('''
-    CREATE TABLE IF NOT EXISTS priority (
+    CREATE TABLE IF NOT EXISTS tag (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name INTEGER NOT NULL REFERENCES task(id),
       color TEXT NOT NULL

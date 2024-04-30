@@ -1,7 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
-import 'package:planner/classes/db_helper.dart';
+import 'package:planner/classes/db_helper.dart';  
+
 class RegScreen extends StatefulWidget {
   @override
   _RegScreenState createState() => _RegScreenState();
@@ -9,13 +9,17 @@ class RegScreen extends StatefulWidget {
 
 class _RegScreenState extends State<RegScreen> {
   final _formKey = GlobalKey<FormState>(); // Form key for validation
-  final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _fNameController = TextEditingController();
+  final _sNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _usernameController.dispose();
+    _fNameController.dispose();
+    _sNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -37,11 +41,23 @@ class _RegScreenState extends State<RegScreen> {
                 children: [
                   // Name field
                   TextFormField(
-                    controller: _nameController,
+                    controller: _fNameController,
                     decoration: const InputDecoration(labelText: 'Имя'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите имя';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  // Surname field
+                  TextFormField(
+                    controller: _sNameController,
+                    decoration: const InputDecoration(labelText: 'Фамилия'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите фамилию';
                       }
                       return null;
                     },
@@ -97,17 +113,35 @@ class _RegScreenState extends State<RegScreen> {
     );
   }
 
-  Future<void> _registerUser() async {
-  final name = _nameController.text;
+Future<void> _registerUser() async {
+  final username = _usernameController.text;
+  final fName = _fNameController.text;
+  final sName = _sNameController.text;
   final email = _emailController.text;
   final password = _passwordController.text;
 
   final dbHelper = DbHelper();
-  final database =  await dbHelper.database;
+  final database = await dbHelper.database;
 
+
+  // Insert data into user_login table (for authentication)
   await database.insert(
-    'user',
-    {'name': name, 'email': email, 'password': password},
+    'user_login',
+    {
+      'username': username,
+      'password': password,
+    },
+  );
+
+  // Insert data into user_data table (for user information)
+  await database.insert(
+    'user_data',
+    {
+      'username': username, // Use the same username for association
+      'fName': fName,
+      'sName': sName,
+      'email': email,
+    },
   );
 
   await database.close();
@@ -116,4 +150,5 @@ class _RegScreenState extends State<RegScreen> {
     Navigator.pop(context);
   }
 }
+
 }

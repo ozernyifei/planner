@@ -7,6 +7,7 @@ class Task {
     required this.title,
     this.description = '',
     this.dueDate,
+    required this.userId,
     required this.priorityId,
     required this.statusId,
     this.tagId,
@@ -18,6 +19,7 @@ class Task {
       title: map['title'],
       description: map['description'] ?? '',
       dueDate: DateTime.parse(map['dueDate']), 
+      userId: map['userId'],
       priorityId: map['priorityId'],
       statusId: map['statusId'],
       tagId: map['tagId'],
@@ -27,6 +29,7 @@ class Task {
   String title;
   String? description;
   DateTime? dueDate;
+  int userId;
   int priorityId;
   int statusId;
   int? tagId;
@@ -37,6 +40,7 @@ class Task {
       'title': title,
       'description': description,
       'dueDate': dueDate?.toIso8601String(),
+      'userId': userId,
       'priorityId': priorityId,
       'statusId': statusId,
       'tagId': tagId,
