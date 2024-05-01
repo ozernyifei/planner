@@ -11,8 +11,8 @@ class UserData {
   factory UserData.fromMap(Map<String, dynamic> map) {
     return UserData(
       id: map['id'] ?? 0,
-      fName: map['fName'],
-      sName: map['sName'],
+      fName: map['first_name'],
+      sName: map['second_name'],
       username: map['username'],
       email: map['email'],
       password: map['password'],
@@ -28,8 +28,8 @@ class UserData {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'fName': fName,
-      'sName': sName,
+      'first_name': fName,
+      'second_name': sName,
       'username': username,
       'email': email,
       'password': password,

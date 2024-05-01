@@ -1,6 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
-import 'package:planner/classes/db_helper.dart';  
+import 'package:planner/classes/db_helper.dart';
+import 'package:planner/widgets/show_error.dart';
+import 'package:sqflite/sqflite.dart';
 
 class RegScreen extends StatefulWidget {
   @override
@@ -39,6 +41,18 @@ class _RegScreenState extends State<RegScreen> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
+                  // Username field
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: const InputDecoration(labelText: 'Имя пользователя'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Введите имя пользователя (username)';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   // Name field
                   TextFormField(
                     controller: _fNameController,
@@ -125,24 +139,13 @@ Future<void> _registerUser() async {
 
 
   // Insert data into user_login table (for authentication)
-  await database.insert(
-    'user_login',
-    {
-      'username': username,
-      'password': password,
-    },
-  );
-
-  // Insert data into user_data table (for user information)
-  await database.insert(
-    'user_data',
-    {
-      'username': username, // Use the same username for association
-      'fName': fName,
-      'sName': sName,
-      'email': email,
-    },
-  );
+  try {
+  await _insertUser(database, username, password, fName, sName, email);
+} on DatabaseException catch (e) {
+  if (e.isUniqueConstraintError()) {
+    await _showUsernameExistsError();
+  }
+}
 
   await database.close();
 
@@ -151,4 +154,30 @@ Future<void> _registerUser() async {
   }
 }
 
+Future<void> _insertUser(Database database, String username, String password, String fName, String sName, String email) async {
+  await database.insert(
+    'user_login',
+    {
+      'username': username,
+      'password': password,
+    },
+  );
+  
+  // Insert data into user_data table (for user information)
+  await database.insert(
+    'user_data',
+    {
+      'username': username, // Use the same username for association
+      'first_name': fName,
+      'second_name': sName,
+      'email': email,
+    },
+  );
+}
+
+  Future<void> _showUsernameExistsError() async {
+    // Display error message using appropriate UI element
+    // For example, using a dialog box:
+   await showError('Пользователь с такими данными уже существует', context);
+  }
 }

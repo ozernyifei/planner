@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:planner/classes/user_service.dart';
 import 'package:planner/screens/reg_screen.dart';
+import 'package:planner/widgets/show_error.dart';
 
 
 
@@ -67,12 +68,20 @@ class _AuthScreenState extends State<AuthScreen> {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
-                if (_formKey.currentState!.validate()) {
-                  await UserService.isUserLoggedIn(
+                final isValid = _formKey.currentState?.validate() ?? false;
+                var isLoggedIn = false;
+                if (isValid) {
+                  isLoggedIn = UserService.isUserLoggedIn(
                     _usernameController.text,
-                    _passwordController.text); // Call the login function
+                    _passwordController.text) as bool; // Call the login function
                 }
-              
+                // if (isLoggedIn) {
+                //   await Navigator.pushReplacementNamed(context, '/home');
+                // }
+                // else {
+                //   await _showUserNotLoggedInError();
+                // }
+                await Navigator.pushReplacementNamed(context, '/home');
               },
               child: const Text('Войти'),
             ),
@@ -95,4 +104,10 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
     );
   }
+  Future<void> _showUserNotLoggedInError() async {
+    // Display error message using appropriate UI element
+    await showError('Такого пользователя не существует', context);
+  }
+
+  
 }

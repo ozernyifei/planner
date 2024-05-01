@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static String get _databaseName => 'taskPlanner.db';
+  static String get _databaseName => 'taskPlanner2.db';
 
   Database? _database;
 
@@ -15,7 +15,10 @@ class DbHelper {
   final databasePath = '$dbPath/$_databaseName';
 
   final database = await openDatabase(databasePath);
+  await database.execute('PRAGMA foreign_keys = ON');
+  print('aboba');
   await _createPlannerDatabase(database);
+
   return database;
 
 
@@ -46,7 +49,7 @@ class DbHelper {
       first_name TEXT NOT NULL,
       last_name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
-      username TEXT UNIQUE NOT NULL,
+      username TEXT UNIQUE NOT NULL
     )
   ''');
 
@@ -54,7 +57,7 @@ class DbHelper {
     CREATE TABLE IF NOT EXISTS user_login (
       user_id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
+      password TEXT NOT NULL
     )
   ''');
 
@@ -92,10 +95,10 @@ class DbHelper {
       title TEXT NOT NULL,
       description TEXT,
       dueDate DATETIME,
-      user_id INTEGER NOT NULL REFERENCES user_data(id)
+      user_id INTEGER NOT NULL,
       priority_id INTEGER NOT NULL REFERENCES priority(id),
       status_id INTEGER NOT NULL REFERENCES status(id),
-      tag_id INTEGER REFERENCES tag(id)
+      tag_id INTEGER REFERENCES tag(id),
       FOREIGN KEY (user_id) REFERENCES user_data(user_id) ON DELETE CASCADE
     )
   ''');
