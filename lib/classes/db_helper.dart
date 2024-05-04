@@ -1,7 +1,7 @@
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static String get _databaseName => 'taskPlanner2.db';
+  static String get _databaseName => 'taskPlanner1.db';
 
   Database? _database;
 
@@ -15,8 +15,6 @@ class DbHelper {
   final databasePath = '$dbPath/$_databaseName';
 
   final database = await openDatabase(databasePath);
-  await database.execute('PRAGMA foreign_keys = ON');
-  print('aboba');
   await _createPlannerDatabase(database);
 
   return database;
@@ -47,7 +45,7 @@ class DbHelper {
     CREATE TABLE IF NOT EXISTS user_data (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       first_name TEXT NOT NULL,
-      last_name TEXT NOT NULL,
+      second_name TEXT NOT NULL,
       email TEXT UNIQUE NOT NULL,
       username TEXT UNIQUE NOT NULL
     )
@@ -113,7 +111,7 @@ class DbHelper {
   Future<void> _createTableTag(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS tag (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name INTEGER NOT NULL REFERENCES task(id),
+      name TEXT NOT NULL,
       color TEXT NOT NULL
     )
   ''');

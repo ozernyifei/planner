@@ -40,6 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             const SizedBox(height: 40),
             TextFormField(
+              controller: _usernameController,
               decoration: const InputDecoration(
                 labelText: 'Логин',
                 hintText: 'Введите свой логин',
@@ -53,6 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             const SizedBox(height: 20),
              TextFormField(
+              controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                 labelText: 'Пароль',
@@ -68,20 +70,21 @@ class _AuthScreenState extends State<AuthScreen> {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
-                final isValid = _formKey.currentState?.validate() ?? false;
-                var isLoggedIn = false;
-                if (isValid) {
-                  isLoggedIn = UserService.isUserLoggedIn(
-                    _usernameController.text,
-                    _passwordController.text) as bool; // Call the login function
+                final username = _usernameController.text;
+                final password = _passwordController.text;
+                // final isValid = _formKey.currentState?.validate() ?? false;
+
+                var isLoggedIn = await UserService.isUserLoggedIn(
+                    username,
+                    password);
+
+                if (isLoggedIn) {
+                  await Navigator.pushReplacementNamed(context, '/home');
                 }
-                // if (isLoggedIn) {
-                //   await Navigator.pushReplacementNamed(context, '/home');
-                // }
-                // else {
-                //   await _showUserNotLoggedInError();
-                // }
-                await Navigator.pushReplacementNamed(context, '/home');
+                else {
+                  await _showUserNotLoggedInError();
+                }
+                
               },
               child: const Text('Войти'),
             ),

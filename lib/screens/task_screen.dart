@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/models/task.dart';
-import 'package:planner/screens/edit_task.dart';
+import 'package:planner/screens/edit_task_dialog.dart';
 
 
 class TaskScreen extends StatefulWidget {

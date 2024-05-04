@@ -162,6 +162,7 @@ Future<void> _insertUser(Database database, String username, String password, St
       'password': password,
     },
   );
+  print('data inserted to user_login: $username, $password');
   
   // Insert data into user_data table (for user information)
   await database.insert(
@@ -173,6 +174,7 @@ Future<void> _insertUser(Database database, String username, String password, St
       'email': email,
     },
   );
+  print('data inserted to user_login: $username, $fName, $sName, $email');
 }
 
   Future<void> _showUsernameExistsError() async {

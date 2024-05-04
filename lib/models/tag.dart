@@ -20,7 +20,7 @@ class Tag {
     return {
       'id': id,
       'title': title,
-      'color':color,
+      'color': color,
     };
   }
 }

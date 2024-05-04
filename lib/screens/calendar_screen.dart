@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:planner/screens/edit_event.dart';
+import 'package:planner/screens/edit_event_dialog.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 

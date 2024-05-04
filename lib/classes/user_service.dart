@@ -4,7 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class UserService {
-  static Future<bool> isUserLoggedIn(String username, String password) async {
+  static Future<bool> 
+  isUserLoggedIn(String username, String password) async {
     final prefs = await SharedPreferences.getInstance();
     final storedUsername = prefs.getString('username');
     final storedToken = prefs.getString('token');
@@ -13,7 +14,9 @@ class UserService {
     if (storedUsername != null && storedToken != null && timestamp != null) {
       final sessionDuration = DateTime.now().millisecondsSinceEpoch - timestamp;
       if (sessionDuration < 3600000) {
+        print('was logged in SP');
         return true; 
+        
       }
     }
 
@@ -26,10 +29,13 @@ class UserService {
       whereArgs: [username,password],
       limit: 1
     );
+    print('$username, $password, $result');
 
     if (result.isNotEmpty) {
+      print('is in database');
       return true;
     }
+    print('not in db nor sp');
 
     return false; 
   } 
