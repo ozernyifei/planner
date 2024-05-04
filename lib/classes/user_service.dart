@@ -4,22 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class UserService {
-  static Future<bool> 
-  isUserLoggedIn(String username, String password) async {
-    final prefs = await SharedPreferences.getInstance();
-    final storedUsername = prefs.getString('username');
-    final storedToken = prefs.getString('token');
-    final timestamp = prefs.getInt('timestamp');
 
-    if (storedUsername != null && storedToken != null && timestamp != null) {
-      final sessionDuration = DateTime.now().millisecondsSinceEpoch - timestamp;
-      if (sessionDuration < 3600000) {
-        print('was logged in SP');
-        return true; 
-        
-      }
-    }
-
+  static Future<bool> isUserExists(String username, String password) async {
     final dbHelper = DbHelper();
     final database = await dbHelper.database;
 
@@ -38,6 +24,26 @@ class UserService {
     print('not in db nor sp');
 
     return false; 
+  }
+
+  static Future<bool> 
+  isUserLoggedIn(String username, String password) async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedUsername = prefs.getString('username');
+    final storedToken = prefs.getString('token');
+    final timestamp = prefs.getInt('timestamp');
+
+    if (storedUsername != null && storedToken != null && timestamp != null) {
+      final sessionDuration = DateTime.now().millisecondsSinceEpoch - timestamp;
+      if (sessionDuration < 3600000) {
+        print('was logged in SP');
+        return true; 
+        
+      }
+    }
+
+    return false;
+    
   } 
 
   static Future<void> saveLoggedInUser(String username, String token) async {

@@ -12,7 +12,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
 
-  final _formKey = GlobalKey<FormState>(); // Form key for validation
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -72,18 +71,17 @@ class _AuthScreenState extends State<AuthScreen> {
               onPressed: () async {
                 final username = _usernameController.text;
                 final password = _passwordController.text;
-                // final isValid = _formKey.currentState?.validate() ?? false;
-
-                var isLoggedIn = await UserService.isUserLoggedIn(
-                    username,
-                    password);
-
-                if (isLoggedIn) {
+                final isLoggedIn = await UserService.isUserExists(
+                  username,
+                  password);
+                if (mounted && isLoggedIn) {
                   await Navigator.pushReplacementNamed(context, '/home');
                 }
                 else {
-                  await _showUserNotLoggedInError();
-                }
+                await _showUserNotLoggedInError();
+              }
+              
+                
                 
               },
               child: const Text('Войти'),
