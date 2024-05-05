@@ -15,19 +15,18 @@ class UserService {
       whereArgs: [username,password],
       limit: 1
     );
-    print('$username, $password, $result');
+   // print('$username, $password, $result');
 
     if (result.isNotEmpty) {
-      print('is in database');
+    //  print('is in database');
       return true;
     }
-    print('not in db nor sp');
+    //print('not in db nor sp');
 
     return false; 
   }
 
-  static Future<bool> 
-  isUserLoggedIn(String username, String password) async {
+  static Future<bool> isUserLoggedIn(String username, String password) async {
     final prefs = await SharedPreferences.getInstance();
     final storedUsername = prefs.getString('username');
     final storedToken = prefs.getString('token');
@@ -36,18 +35,30 @@ class UserService {
     if (storedUsername != null && storedToken != null && timestamp != null) {
       final sessionDuration = DateTime.now().millisecondsSinceEpoch - timestamp;
       if (sessionDuration < 3600000) {
-        print('was logged in SP');
+       // print('was logged in SP');
         return true; 
         
       }
     }
-
     return false;
-    
   } 
 
   static Future<void> saveLoggedInUser(String username, String token) async {
+
     final prefs = await SharedPreferences.getInstance();
+    final dbHelper = DbHelper();
+    final database = await dbHelper.database;
+
+    final result = await database.query(
+      'user_data',
+      where: 'username = ?',
+      whereArgs: [username],
+      limit: 1
+      );
+
+    final userId = result.first['id']! as int;
+    
+    await prefs.setInt('user_id', userId);
     await prefs.setString('username', username);
     await prefs.setString('token', token);
     await prefs.setInt('timestamp', DateTime.now().millisecondsSinceEpoch);
@@ -59,14 +70,14 @@ class UserService {
     return username ?? ''; //
   }
 
-  static Future<List<Task>> getTasksForUser(String username) async {
+  static Future<List<Task>> getTasksForUser(int userId) async {
     final dbHelper = DbHelper();
     final database = await dbHelper.database;
 
     final result = await database.query(
-      'tasks',
-      where: 'username = ?',
-      whereArgs: [username],
+      'task',
+      where: 'user_id = ?',
+      whereArgs: [userId],
     );
 
     if (result.isNotEmpty) {
@@ -74,5 +85,10 @@ class UserService {
     } else {
       return [];
     }
+  }
+  
+  static Future<int> fetchUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('user_id')!;
   }
 }

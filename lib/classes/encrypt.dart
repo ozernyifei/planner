@@ -23,7 +23,7 @@ import 'dart:math';
 // }
 
 
-class SecureToken {
+class Encrypt {
 
   Future<List<int>> generateRandomBytes(int length) async {
     final random = Random.secure();
@@ -37,9 +37,9 @@ class SecureToken {
   
 
   static Future<String> generateToken() async {
-    final secureToken = SecureToken();
+    final encrypt = Encrypt();
     
-    final randomBytes = await secureToken.generateRandomBytes(32);
+    final randomBytes = await encrypt.generateRandomBytes(32);
     final token = base64Encode(randomBytes);
 
     return token;

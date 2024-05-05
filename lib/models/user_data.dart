@@ -5,7 +5,6 @@ class UserData {
     required this.sName,
     required this.username,
     required this.email,
-    required this.password,
   });
 
   factory UserData.fromMap(Map<String, dynamic> map) {
@@ -15,7 +14,6 @@ class UserData {
       sName: map['second_name'],
       username: map['username'],
       email: map['email'],
-      password: map['password'],
     );
   }
   int? id;
@@ -23,7 +21,6 @@ class UserData {
   String sName;
   String username;
   String email;
-  String password;
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,7 +29,6 @@ class UserData {
       'second_name': sName,
       'username': username,
       'email': email,
-      'password': password,
     };
   }
 }

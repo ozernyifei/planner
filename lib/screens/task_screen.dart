@@ -1,9 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
+import 'package:planner/classes/user_service.dart';
 import 'package:planner/models/task.dart';
 import 'package:planner/screens/edit_task_dialog.dart';
 
@@ -15,20 +15,25 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-
   final DbHelper dbHelper = DbHelper();
+  int? _userId;
 
   List<Task> tasks = [];
-  Future<List<Task>> _loadTasks() async {
-  
-  final database = await dbHelper.database;
-  final tasksData = await database.query('task'); 
-  final tasks = <Task>[];
-  for (final row in tasksData) {
-    tasks.add(Task.fromMap(row)); 
+
+  Future<void> _fetchTasks() async {
+    _userId = await UserService.fetchUserId();
+    if (_userId != null) {
+      final loadedTasks = await UserService.getTasksForUser(_userId!);
+      setState(() {
+        tasks = loadedTasks;
+      });
+    } else {
+      // Handle the case where user ID is not found (optional)
+      print('User ID not found in SharedPreferences');
+    }
   }
-  return tasks;
-}
+
+
   Future<void> _deleteTask(int taskId) async {
   final dbHelper = DbHelper();
   final database = await dbHelper.database;
@@ -43,11 +48,8 @@ class _TaskScreenState extends State<TaskScreen> {
   void initState()  {
     super.initState();
      unawaited(dbHelper.initDatabase()); 
-     unawaited(_loadTasks().then((loadedTasks) {
-      setState(() {
-        tasks = loadedTasks;
-      });
-    }));
+     unawaited(_fetchTasks()); {
+    }
   }
 
   @override
@@ -72,8 +74,7 @@ class _TaskScreenState extends State<TaskScreen> {
                         ListTile(
                           title: const Text('Редактировать'),
                           onTap: () {
-                            //editTask(task.id);
-                            Navigator.pop(context);
+                            _editTask(context, task);
                           },
                         ),
                         ListTile(
@@ -104,4 +105,15 @@ class _TaskScreenState extends State<TaskScreen> {
       ),
     );
   }
+}
+
+// TODO(lebowskd): create edit task
+
+Future<void> _editTask(BuildContext context, Task task) async { 
+  await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditTaskScreen(task: task)
+              ),
+          );
 }

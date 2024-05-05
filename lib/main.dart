@@ -25,6 +25,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
+			debugShowCheckedModeBanner: false,
     );
   }
 }

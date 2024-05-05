@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner/classes/encrypt.dart';
 import 'package:planner/classes/user_service.dart';
 import 'package:planner/screens/reg_screen.dart';
 import 'package:planner/widgets/show_error.dart';
@@ -75,6 +76,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   username,
                   password);
                 if (mounted && isLoggedIn) {
+                  await UserService.saveLoggedInUser(username, await Encrypt.generateToken());
                   await Navigator.pushReplacementNamed(context, '/home');
                 }
                 else {
