@@ -1,6 +1,6 @@
 class Status {
   Status({
-    required this.id,
+    this.id,
     required this.title,
     this.description = '',
   });
@@ -12,7 +12,7 @@ class Status {
       description: map['description'] ?? '',
     );
   }
-  int id;
+  int? id;
   String title;
   String? description;
 

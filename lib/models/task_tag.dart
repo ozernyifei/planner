@@ -1,6 +1,6 @@
 class TaskTag {
   TaskTag({
-    required this.id,
+    this.id,
     required this.taskID,
     required this.tagID,   
   });
@@ -12,7 +12,7 @@ class TaskTag {
       tagID: map['tagID'],
     );
   }
-  int id;
+  int? id;
   String taskID;
   String tagID;
 

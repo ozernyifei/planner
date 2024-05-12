@@ -81,10 +81,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 }
                 else {
                 await _showUserNotLoggedInError();
-              }
-              
-                
-                
+                }
               },
               child: const Text('Войти'),
             ),

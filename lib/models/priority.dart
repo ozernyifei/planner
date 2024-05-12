@@ -1,18 +1,18 @@
 class Priority {
   Priority({
-    required this.id,
+    this.id,
     required this.title,
     this.description = '',   
   });
 
   factory Priority.fromMap(Map<String, dynamic> map) {
     return Priority(
-      id: map['id'] ?? 0,
+      id: map['id'],
       title: map['title'],
       description: map['description'] ?? '',
     );
   }
-  int id;
+  int? id;
   String title;
   String? description;
 

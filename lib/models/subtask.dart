@@ -1,7 +1,7 @@
 class Subtask {
 
   Subtask({
-    required this.id,
+    this.id,
     required this.title,
     this.description = '',
     required this.taskId,
@@ -15,7 +15,7 @@ class Subtask {
       taskId: map['taskId'],
     );
   }
-  int id;
+  int? id;
   String title;
   String? description;
   int taskId;

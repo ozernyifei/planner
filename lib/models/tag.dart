@@ -1,6 +1,6 @@
 class Tag {
     Tag({
-    required this.id,
+    this.id,
     required this.title,
     required this.color,   
   });
@@ -12,9 +12,9 @@ class Tag {
       color: map['color'],
     );
   }
-  int id;
+  int? id;
   String title;
-  String color;
+  int color;
 
   Map<String, dynamic> toMap() {
     return {

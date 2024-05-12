@@ -1,3 +1,8 @@
+import 'package:planner/models/event.dart';
+import 'package:planner/models/priority.dart';
+import 'package:planner/models/status.dart';
+import 'package:planner/models/tag.dart';
+import 'package:planner/models/task.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
@@ -18,14 +23,13 @@ class DbHelper {
   await _createPlannerDatabase(database);
 
   return database;
-
-
   }
 
   Future<void> deleteTask(Database database, int id) async => database.delete('task', where: 'id = ?', whereArgs: [id]);
   Future<void> deleteEvent(Database database, int id) async => database.delete('event', where: 'id = ?', whereArgs: [id]);
 
 
+  
 
   Future<void> _createPlannerDatabase(Database database) async {
     // await _createTablePeriod(database);
@@ -40,7 +44,60 @@ class DbHelper {
     //await _createTableTaskReminder(database);
   }
 
+  final List<Priority> predefinedPriorities = [
+  Priority(title: 'Высокий', description: 'Задачи, которая является важной и которой следует уделять приоритетное внимание по сравнению с менее срочными делами.'),
+  Priority(title: 'Средний', description: 'Задачи, которые является умеренно важной и может быть запланирована соответствующим образом'),
+  Priority(title: 'Низкий', description: 'Задача, которые менее важны и может быть решена, когда позволит время'),
+  // Add more priorities here
+  ];
+
+  final List<Tag> predefinedTags = [
+    Tag(title: 'Личное', color: 0xFF0000FF),
+    Tag(title: 'Работа', color: 0xFFFFD700), 
+    Tag(title: 'Здоровье', color: 0xFF00FF00),
+    Tag(title: 'Учеба', color: 0xFF7CFC00),
+    Tag(title: 'Финансы', color: 0xFF00FFFF),
+    Tag(title: 'Домашние дела', color: 0xC0C0C0),
+    // Add more tags here
+  ];
+
+  final List<Status> predefinedStatuses = [
+    Status(title: 'В процессе', description: 'Задача еще не выполнена'),
+    Status(title: 'Выполнена', description: 'Задача выполнена'),
+    Status(title: 'Заброшена', description: 'Задача была заброшена'),
+  ];
+
+  Future<List<Event>> getEventsForUser(int userId) async {
+    final db = await database;
+    final events = await db.query('event',
+        where: 'userId = ?',
+        whereArgs: [userId],
+        orderBy: 'startTime ASC');
+    return events.map(Event.fromMap).toList();
+  }
+
+  Future<void> addEvent(Event event) async {
+    final db = await database;
+    await db.insert('event', event.toMap());
+  }
+
+  Future<void> addTask (Task task) async {
+    final db = await database;
+    await db.insert('task', task.toMap());
+  }
   
+  Future<void> createTableEvent(Database database) async => database.execute('''
+      CREATE TABLE IF NOT EXISTS event (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        startTime TEXT NOT NULL,
+        endTime TEXT NOT NULL,
+        color INTEGER NOT NULL,
+        is_all_day BOOL NOT NULL,
+        userId INTEGER NOT NULL
+      )
+    ''');
+
   Future<void> _createTableUserData(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS user_data (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,7 +149,7 @@ class DbHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       description TEXT,
-      dueDate DATETIME,
+      dueDate TEXT,
       user_id INTEGER NOT NULL,
       priority_id INTEGER NOT NULL REFERENCES priority(id),
       status_id INTEGER NOT NULL REFERENCES status(id),
@@ -116,6 +173,4 @@ class DbHelper {
     )
   ''');
   // ... методы для добавления, получения, обновления и удаления данных из каждой таблицы
-
-
 }

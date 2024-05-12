@@ -21,7 +21,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
   int _selectedPriority = 1;
   int _selectedStatus = 1;
-  // Контроллеры для полей ввода
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dueDateController = TextEditingController();
@@ -37,21 +36,20 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       _isCreatingNewTask = false;
       _titleController.text = widget.task!.title;
       _descriptionController.text = widget.task!.description!;
-      _dueDateController.text = widget.task!.dueDate!.toIso8601String();
+      _dueDateController.text = widget.task!.dueDate!.toIso8601String();                                                                                  
       _selectedPriority = widget.task!.priorityId;
-    }
-  }
+    }                             
+  }                                                   
 
   // Сохранение задачи
   Future<void> _saveTask() async {
-    final prefs = await SharedPreferences.getInstance();
-    final username = prefs.getString('username');
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      final prefs = await SharedPreferences.getInstance();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      final username = prefs.getString('username');
 
 
-    if (username != null) {
-    // Look up user ID in SQLite database based on username
-      final dbHelper = DbHelper();
-      final database = await dbHelper.database;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      if (username != null) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        final dbHelper = DbHelper();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        final database = await dbHelper.database;
 
       final result = await database.query('user_data',
           where: 'username = ?',
@@ -64,8 +62,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         // Proceed with saving the task
         final task = widget.task ?? Task(
           title: '',
-          priorityId: _selectedPriority, // Example default priority
-          statusId: _selectedStatus, // Example default status
+          priorityId: _selectedPriority, 
+          statusId: _selectedStatus, 
           userId: userId, // Add userId here
         );
 
@@ -82,7 +80,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           Navigator.pop(context);
         }
       } else {
-        // Handle the case where user ID cannot be found in SQLite
+        //TODO(lebowskd):
+        //  Handle the case where user ID cannot be found in SQLite
         // (e.g., show an error message or prevent saving)
       }
     } else {
@@ -186,52 +185,52 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 const Text('Высокий'),
               ],
             ),
-            Visibility(
-              visible: !_isCreatingNewTask,
-              child: Column(
-                children: [
-                  const SizedBox(height: 10), 
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Срочность задачи'),
-                  ),
-                  const SizedBox(height: 10), // Add some spacing between label and radios
-                  Row(
+              Visibility(
+                visible: !_isCreatingNewTask,
+                child: Column(
                   children: [
-                    Radio(
-                      value: 1,
-                      groupValue: _selectedStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStatus = value!;
-                        });
-                      },
+                    const SizedBox(height: 10), 
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Срочность задачи'),
                     ),
-                    const Text('Низкий'),
-                    Radio(
-                      value: 2,
-                      groupValue: _selectedStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStatus = value!;
-                        });
-                      },
+                    const SizedBox(height: 10), // Add some spacing between label and radios
+                    Row(
+                    children: [
+                      Radio(
+                        value: 1,
+                        groupValue: _selectedStatus,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedStatus = value!;
+                          });
+                        },
+                      ),
+                      const Text('Низкий'),
+                      Radio(
+                        value: 2,
+                        groupValue: _selectedStatus,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedStatus = value!;
+                          });
+                        },
+                      ),
+                      const Text('Средний'),
+                      Radio(
+                        value: 3,
+                        groupValue: _selectedStatus,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedStatus = value!;
+                          });
+                        },
+                      ),
+                      const Text('Высокий'),
+                      ],
                     ),
-                    const Text('Средний'),
-                    Radio(
-                      value: 3,
-                      groupValue: _selectedStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedStatus = value!;
-                        });
-                      },
-                    ),
-                    const Text('Высокий'),
                   ],
-                              ),
-                ],
-              ),
+                ),
               ),
               const TextField(),
               // Кнопка сохранения задачи
