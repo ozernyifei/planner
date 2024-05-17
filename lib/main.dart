@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:planner/1placeholders/calendar_placeholder.dart';
+import 'package:planner/1placeholders/task_filled.dart';
 import 'package:planner/screens/auth_screen.dart';
-import 'package:planner/screens/calendar_screen.dart';
+// import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
-import 'package:planner/screens/task_screen.dart';
+// import 'package:planner/screens/task_screen.dart';
 
 
 void main() {
@@ -86,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+    
   }
 }
 

@@ -2,7 +2,7 @@ class Tag {
     Tag({
     this.id,
     required this.title,
-    required this.color,   
+    this.color = 0xFF000000,   
   });
 
   factory Tag.fromMap(Map<String, dynamic> map) {
