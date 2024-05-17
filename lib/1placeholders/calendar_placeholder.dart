@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class Event {
-  final String title;
-  final DateTime startTime;
-  final DateTime endTime;
 
   const Event({
     required this.title,
     required this.startTime,
     required this.endTime,
   });
+  final String title;
+  final DateTime startTime;
+  final DateTime endTime;
 }
 
 class CalendarScreen extends StatefulWidget {
@@ -70,13 +70,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 // Custom EventDataSource class
 class EventDataSource extends CalendarDataSource {
-  final List<Event> events;
 
   EventDataSource(this.events);
+  final List<Event> events;
 
   List<Appointment> getAppointments(String title, DateTime startDate, DateTime endDate) {
-    // Logic to convert Event data to Appointment format
-    // ... your implementation here
     return events
         .map((event) => Appointment(
               subject: event.title,
