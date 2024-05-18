@@ -38,12 +38,25 @@ class _TaskScreenState extends State<TaskScreen> {
       endTime: DateTime(2024, 05, 21, 10), // Example end time
       tags: ['UI Design', 'Task Management'],
     ),
+    Task(
+      name: 'Implement Task Data Persistence',
+      description: 'Choose a suitable storage solution (local storage, database) to persist task data.',
+      endTime: DateTime(2024, 05, 23, 15), // Example end time
+      tags: ['Development', 'Data Storage'],
+    ),
+    Task(
+      name: 'Complete UI Design for Task Screen',
+      description: 'Finalize the design for the task management screen, including task list, details, and editing.',
+      endTime: DateTime(2024, 05, 21, 10), // Example end time
+      tags: ['UI Design', 'Task Management'],
+    ),
   ];
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Task'),
+        title: const Text('Ваши задачи'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -125,6 +138,14 @@ class _TaskScreenState extends State<TaskScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+  onPressed: () {
+    // Handle FAB press to create a new task
+    print('Create new task');
+    // You might want to navigate to a task creation screen here
+  },
+  child: const Icon(Icons.add),
+),
     );
   }
 }
