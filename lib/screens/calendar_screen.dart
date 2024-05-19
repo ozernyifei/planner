@@ -26,6 +26,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Календарь'),
+      ),
         floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Нажмите на FAB, чтобы перейти к edit_task.dart

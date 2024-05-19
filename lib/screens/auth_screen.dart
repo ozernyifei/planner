@@ -39,34 +39,64 @@ class _AuthScreenState extends State<AuthScreen> {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
-            TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Логин',
-                hintText: 'Введите свой логин',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Введите имя пользователя';
+            SizedBox(
+              
+              width: 0.9 * MediaQuery.of(context).size.width,
+              child: TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
+                  labelText: 'Логин',
+                  labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                  hintText: 'Введите свой логин',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Введите имя пользователя';
+                  }
+                  return null;
                 }
-                return null;
-              }
+              ),
             ),
             const SizedBox(height: 20),
-             TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Пароль',
-                hintText: 'Введите свой пароль',
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Введите пароль';
+             SizedBox(
+              width: 0.9 * MediaQuery.of(context).size.width,
+               child: TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                  labelText: 'Пароль',
+                  hintText: 'Введите свой пароль',
+                  hintStyle: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Введите пароль';
+                  }
+                  return null;
                 }
-                return null;
-              }
-            ),
+               ),
+             ),
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () async {
@@ -96,7 +126,7 @@ class _AuthScreenState extends State<AuthScreen> {
               },
               child: Text(
                 'Регистрация',
-                style: TextStyle(color: Colors.blue[200], decoration: TextDecoration.underline),
+                style: TextStyle(color: Colors.blue[700], decoration: TextDecoration.underline),
               ),
             ),
           ],

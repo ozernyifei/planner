@@ -44,10 +44,23 @@ class _RegScreenState extends State<RegScreen> {
                   // Username field
                   TextFormField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(labelText: 'Имя пользователя'),
+                    decoration: const InputDecoration(
+                      labelText: 'Имя пользователя',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Введите имя пользователя',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Введите имя пользователя (username)';
+                        return 'Введите имя пользователя';
                       }
                       return null;
                     },
@@ -56,7 +69,20 @@ class _RegScreenState extends State<RegScreen> {
                   // Name field
                   TextFormField(
                     controller: _fNameController,
-                    decoration: const InputDecoration(labelText: 'Имя'),
+                    decoration: const InputDecoration(
+                      labelText: 'Имя',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Введите имя',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите имя';
@@ -68,7 +94,20 @@ class _RegScreenState extends State<RegScreen> {
                   // Surname field
                   TextFormField(
                     controller: _sNameController,
-                    decoration: const InputDecoration(labelText: 'Фамилия'),
+                    decoration: const InputDecoration(
+                      labelText: 'Фамилия',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Введите фамилию',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите фамилию';
@@ -80,7 +119,20 @@ class _RegScreenState extends State<RegScreen> {
                   // Email field
                   TextFormField(
                     controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Введите email',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -97,7 +149,22 @@ class _RegScreenState extends State<RegScreen> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Пароль'),
+                    decoration: const InputDecoration(
+                      labelText: 'Пароль',
+                      labelStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                      hintText: 'Введите пароль',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      ),
+                      
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Введите пароль';
