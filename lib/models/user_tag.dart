@@ -1,25 +1,25 @@
-class TaskTag {
-  TaskTag({
+class UserTag {
+  UserTag({
     this.id,
-    required this.taskId,
+    required this.userId,
     required this.tagId,   
   });
 
-  factory TaskTag.fromMap(Map<String, dynamic> map) {
-    return TaskTag(
+  factory UserTag.fromMap(Map<String, dynamic> map) {
+    return UserTag(
       id: map['id'] ?? 0,
-      taskId: map['task_id'],
+      userId: map['user_id'],
       tagId: map['tag_id'],
     );
   }
   int? id;
-  String taskId;
+  String userId;
   String tagId;
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'task_id': taskId,
+      'user_id': userId,
       'tag_id':tagId,
     };
   }

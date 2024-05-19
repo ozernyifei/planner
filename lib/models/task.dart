@@ -17,10 +17,10 @@ class Task {
       id: map['id'] ?? 0,
       title: map['title'],
       description: map['description'] ?? '',
-      dueDate: DateTime.parse(map['dueDate']), 
+      dueDate: DateTime.parse(map['due_date']), 
       userId: map['user_id'],
-      priorityId: map['priorityId'],
-      statusId: map['statusId'],
+      priorityId: map['priority_id'],
+      statusId: map['status_id'],
 
     );
   }
@@ -38,10 +38,10 @@ class Task {
       'id': id,
       'title': title,
       'description': description,
-      'dueDate': dueDate?.toIso8601String(),
+      'due_date': dueDate?.toIso8601String(),
       'user_id': userId,
-      'priorityId': priorityId,
-      'statusId': statusId,
+      'priority_id': priorityId,
+      'status_id': statusId,
 
     };
   }

@@ -38,6 +38,7 @@ class DbHelper {
     await _createTableSubtask(database);
     await _createTableTask(database);
     await _createTableTaskTag(database);
+    await _createTableUserTag(database);
     await _createTableTag(database);
     await _createTableUserData(database);
     await _createTableUserLogin(database);
@@ -90,11 +91,11 @@ class DbHelper {
       CREATE TABLE IF NOT EXISTS event (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
-        startTime TEXT NOT NULL,
-        endTime TEXT NOT NULL,
+        start_time TEXT NOT NULL,
+        end_time TEXT NOT NULL,
         color INTEGER NOT NULL,
         is_all_day BOOL NOT NULL,
-        userId INTEGER NOT NULL
+        user_id INTEGER NOT NULL
       )
     ''');
 
@@ -140,8 +141,15 @@ class DbHelper {
   Future<void> _createTableTaskTag(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS task_tag (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      taskId INTEGER NOT NULL REFERENCES task(id),
-      tagId INTEGER NOT NULL REFERENCES tag(id)
+      task_id INTEGER NOT NULL REFERENCES task(id),
+      tag_id INTEGER NOT NULL REFERENCES tag(id)
+    )
+  ''');
+  Future<void> _createTableUserTag(Database database) async => database.execute('''
+    CREATE TABLE IF NOT EXISTS user_tag (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL REFERENCES user_login(id),
+      tag_id INTEGER NOT NULL REFERENCES tag(id)
     )
   ''');
   Future<void> _createTableTask(Database database) async => database.execute('''
@@ -149,7 +157,7 @@ class DbHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       description TEXT,
-      dueDate TEXT,
+      due_date TEXT,
       user_id INTEGER NOT NULL,
       priority_id INTEGER NOT NULL REFERENCES priority(id),
       status_id INTEGER NOT NULL REFERENCES status(id),
@@ -162,7 +170,7 @@ class DbHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
       description TEXT,
-      dueDate DATETIME
+      due_date DATETIME
     )
   ''');
   Future<void> _createTableTag(Database database) async => database.execute('''

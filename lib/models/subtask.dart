@@ -12,7 +12,7 @@ class Subtask {
       id: map['id'] ?? 0,
       title: map['title'],
       description: map['description'] ?? '',
-      taskId: map['taskId'],
+      taskId: map['task_id'],
     );
   }
   int? id;
@@ -25,7 +25,7 @@ class Subtask {
       'id': id,
       'title': title,
       'description': description,
-      'taskId': taskId,
+      'task_id': taskId,
     };
   }
 }
