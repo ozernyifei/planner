@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       HomeScreen(),
       TaskScreen(),
       CalendarScreen(),
-      SettingsScreen(),
+      const SettingsScreen(),
     ];
 
     return Scaffold(

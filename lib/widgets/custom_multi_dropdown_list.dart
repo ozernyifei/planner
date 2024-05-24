@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
 class CustomMultiDropDownList extends StatefulWidget {
+
+  const CustomMultiDropDownList({
+    super.key,
+    required this.title,
+    required this.predefinedTags,
+    required this.selectedTags,
+    required this.onSelectionChanged,
+  });
   final String title;
   final List<String> predefinedTags;
   final List<String> selectedTags;
   final Function(List<String>) onSelectionChanged;
 
-  const CustomMultiDropDownList({
-    Key? key,
-    required this.title,
-    required this.predefinedTags,
-    required this.selectedTags,
-    required this.onSelectionChanged,
-  }) : super(key: key);
-
   @override
+  // ignore: library_private_types_in_public_api
   _CustomMultiDropDownListState createState() => _CustomMultiDropDownListState();
 }
 

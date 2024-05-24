@@ -1,10 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:planner/classes/db_helper.dart';
-import 'package:planner/models/event.dart'; 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:planner/classes/db_helper.dart';
+import 'package:planner/models/event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditEventScreen extends StatefulWidget { 
   const EditEventScreen({super.key, this.event});

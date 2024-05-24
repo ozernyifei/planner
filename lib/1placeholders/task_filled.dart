@@ -36,7 +36,7 @@ class _TaskScreenState extends State<TaskScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ваши задачи'),

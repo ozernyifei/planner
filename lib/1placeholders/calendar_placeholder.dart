@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 class Event {
 

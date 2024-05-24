@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/models/task.dart';
-import 'package:planner/widgets/custom_tag.dart';
 import 'package:planner/widgets/custom_multi_dropdown_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class EditTaskScreen extends StatefulWidget {
@@ -56,6 +55,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       _dueDateController.text = widget.task!.dueDate!.toIso8601String();                                                                                  
       _selectedPriorityId = widget.task!.priorityId;
       _selectedStatusId = widget.task!.statusId;
+      // _selectedUrgentId = widget.task!.ur
       _buttonPaddingSize = 40;
     }                             
   }                                                   
@@ -265,7 +265,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     const SizedBox(height: 10), // Add some spacing between label and radios
                     // Status Dropdown
                   Align(
-                    alignment: Alignment.center,
                     child: DropdownButton<String>(
                       value: _selectedStatus,
                       items: _statusOptions.map((value) {

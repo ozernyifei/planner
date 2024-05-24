@@ -56,11 +56,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
 
 List<Meeting> _getDataSource() {
-  final List<Meeting> meetings = <Meeting>[];
-  final DateTime today = DateTime.now();
-  final DateTime startTime =
-      DateTime(today.year, today.month, 10, 9, 0, 0);
-  final DateTime endTime = startTime.add(const Duration(hours: 8));
+  final meetings = <Meeting>[];
+  final today = DateTime.now();
+  final startTime =
+      DateTime(today.year, today.month, 10, 9);
+  final endTime = startTime.add(const Duration(hours: 8));
   meetings.add(Meeting(
       'Пары', startTime, endTime, Colors.lightBlue, false));
   return meetings;
