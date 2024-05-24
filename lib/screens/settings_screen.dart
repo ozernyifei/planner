@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner/screens/edit_userdata_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -22,11 +23,13 @@ class SettingsScreen extends StatelessWidget {
           ListTile(
             
             title: const Text('Поменять данные для входа'),
-            onTap: () {
-              // Handle change data logic
-              print('Changing data...');
-              // You might navigate to a data editing screen
-            },
+                onTap: () async {
+                // Переход на RegScreen()
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditUserdataScreen()),
+                );
+              },
           ),
           ListTile(
             title: const Text('Выйти из аккаунта'),

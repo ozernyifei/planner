@@ -1,30 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:planner/screens/edit_task_dialog.dart';
+
 
 class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tasks'),
+        title: const Text('Ваши задачи'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Empty task list placeholder
-            const Text('No tasks yet'),
-            const SizedBox(height: 24.0),
-
-            // Floating action button (FAB) for creating new tasks
-            ElevatedButton(
-              onPressed: () {
-                // Implement navigation to task creation screen
-              },
-              child: const Icon(Icons.add),
-            ),
+            Text('Задач пока нет.'),
+            SizedBox(height: 24),
           ],
+          
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed:  () async{
+         await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditTaskScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
+      )
     );
   }
 }

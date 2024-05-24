@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:planner/screens/edit_task_dialog.dart';
 
 class Task {
 
@@ -7,12 +8,12 @@ class Task {
     required this.name,
     required this.description,
     required this.endTime,
-    required this.tags,
+    this.tags,
   });
   final String name;
   final String description;
   final DateTime endTime;
-  final List<String> tags;
+  final List<String>? tags;
 }
 
 class TaskScreen extends StatefulWidget {
@@ -27,29 +28,11 @@ class _TaskScreenState extends State<TaskScreen> {
   // ... Your task list and build method remain the same
   final List<Task> tasks = [
     Task(
-      name: 'Implement Task Data Persistence',
-      description: 'Choose a suitable storage solution (local storage, database) to persist task data.',
-      endTime: DateTime(2024, 05, 23, 15), // Example end time
-      tags: ['Development', 'Data Storage'],
+      name: 'Сдача диплома',
+      description: 'Закончить диплом до его срока сдачи',
+      endTime: DateTime(2024, 05, 19, 12), // Example end time
     ),
-    Task(
-      name: 'Complete UI Design for Task Screen',
-      description: 'Finalize the design for the task management screen, including task list, details, and editing.',
-      endTime: DateTime(2024, 05, 21, 10), // Example end time
-      tags: ['UI Design', 'Task Management'],
-    ),
-    Task(
-      name: 'Implement Task Data Persistence',
-      description: 'Choose a suitable storage solution (local storage, database) to persist task data.',
-      endTime: DateTime(2024, 05, 23, 15), // Example end time
-      tags: ['Development', 'Data Storage'],
-    ),
-    Task(
-      name: 'Complete UI Design for Task Screen',
-      description: 'Finalize the design for the task management screen, including task list, details, and editing.',
-      endTime: DateTime(2024, 05, 21, 10), // Example end time
-      tags: ['UI Design', 'Task Management'],
-    ),
+
   ];
   @override
   Widget build(BuildContext context) {
@@ -88,10 +71,38 @@ class _TaskScreenState extends State<TaskScreen> {
                                 ),
                                 const SizedBox(width: 16), // Spacing between name and button
                                 IconButton(
-                                  onPressed: () {
-                                    // Handle edit action for the task
-                                    print('Edit task: ${task.name}');
-                                  },
+                                  onPressed: () async {
+                await showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Настройки задачи'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: const Text('Редактировать'),
+                          onTap: () {
+                            
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('Завершить'),
+                          onTap: () {
+                            
+                          },
+                        ),
+                        ListTile(
+                          title: const Text('Удалить'),
+                          onTap: () {
+                           
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
                                   icon: const Icon(Icons.more_vert), // 3-dot icon
                                 ),
                               ],
@@ -100,6 +111,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             Text(
                               task.description,
                               style: const TextStyle(fontSize: 16),
+                              textAlign: TextAlign.left,
                             ),
                              const SizedBox(height: 16),
 
@@ -115,8 +127,10 @@ class _TaskScreenState extends State<TaskScreen> {
                                   ],
                                 ),
                                 const SizedBox(width: 16), // Add spacing between time and tags
-                                Wrap(spacing: 5,
-                                  children: task.tags.map((tag) => Chip(
+                                if (task.tags?.isNotEmpty ?? false) 
+                                Wrap(
+                                  spacing: 5,
+                                  children: task.tags!.map((tag) => Chip(
                                     avatar: const CircleAvatar(
                                       radius: 5,
                                       backgroundColor: Colors.yellow, // Get color based on tag name
@@ -124,7 +138,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                     ),
                                     label: Text(tag, style: const TextStyle(fontSize: 12)), // Smaller font size
                                   )).toList(),
-                                ),
+                                ) else const SizedBox(),
                               ],
                             ),
                           ],
@@ -139,13 +153,14 @@ class _TaskScreenState extends State<TaskScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    // Handle FAB press to create a new task
-    print('Create new task');
-    // You might want to navigate to a task creation screen here
-  },
-  child: const Icon(Icons.add),
-),
-    );
+        onPressed:  () async{
+         await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EditTaskScreen()),
+          );
+        },
+        child: const Icon(Icons.add),
+      )
+  );
   }
 }

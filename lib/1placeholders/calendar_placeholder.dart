@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 class Event {
 
@@ -38,7 +39,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
     // Create an EventDataSource instance
     final eventDataSource = EventDataSource([event]);
 
-    return Scaffold(
+    return Scaffold(appBar: AppBar(
+        title: const Text('Календарь'),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Navigate to edit event screen (implementation needed)
@@ -49,11 +52,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: Column(
           children: [
             SfCalendar(
+              
               controller: _calendarController,
-              view: CalendarView.week,
+              view: CalendarView.month,
               firstDayOfWeek: 1,
+              
               monthViewSettings: const MonthViewSettings(
-                numberOfWeeksInView: 5,
+                appointmentDisplayMode: MonthAppointmentDisplayMode.appointment,
+                numberOfWeeksInView: 4,
                 showAgenda: true,
               ),
               dataSource: eventDataSource,

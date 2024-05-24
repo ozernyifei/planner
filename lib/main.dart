@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:planner/1placeholders/calendar_placeholder.dart';
-import 'package:planner/1placeholders/task_filled.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+//import 'package:planner/1placeholders/calendar_placeholder.dart';
+import 'package:planner/1placeholders/calendar_filled.dart';
+//import 'package:planner/1placeholders/task_filled.dart';
+import 'package:planner/1placeholders/task_placeholder.dart';
 import 'package:planner/screens/auth_screen.dart';
 // import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
 // import 'package:planner/screens/task_screen.dart';
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 
 void main() {
@@ -18,14 +22,27 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        SfGlobalLocalizations.delegate
+      ],
+      locale: const Locale('ru'),
       initialRoute: '/auth',
       routes: {
         '/auth': (context) => AuthScreen(),
         '/home': (context) => MyHomePage(),
       },
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ru'),
+                ],
       title: 'To-do list',
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blueAccent,
+        ),
+
       ),
 			debugShowCheckedModeBanner: false,
     );
@@ -51,18 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Студент+'),
-      ),
       body: screens[_selectedIndex],
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: ( index) {
+        onDestinationSelected: (index) {
           setState(() {
             _selectedIndex = index;
           }
-        );
+          );
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: Colors.blueAccent,
         selectedIndex: _selectedIndex,
         destinations: const <Widget>[
           NavigationDestination(
@@ -76,19 +90,16 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Задачи',
           ),
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.calendar_today)),
+            icon: Icon(Icons.calendar_today),
             label: 'Календарь',
           ),
           NavigationDestination(
-            icon: Badge(
-              child: Icon(Icons.settings),
-            ),
+            icon: Icon(Icons.settings),
             label: 'Настройки',
           ),
         ],
       ),
     );
-    
   }
 }
 

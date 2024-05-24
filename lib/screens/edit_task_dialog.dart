@@ -1,10 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api, unnecessary_null_comparison, cascade_invocations
 
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/models/task.dart';
 import 'package:planner/widgets/custom_tag.dart';
+import 'package:planner/widgets/custom_multi_dropdown_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 class EditTaskScreen extends StatefulWidget {
 
@@ -20,19 +21,21 @@ class EditTaskScreen extends StatefulWidget {
 class _EditTaskScreenState extends State<EditTaskScreen> {
 
   bool _isCreatingNewTask = true;
-
+  double _buttonPaddingSize = 120;
   int _selectedPriorityId = 1;
   int _selectedStatusId = 1;
+  int _selectedUrgentId = 1;
+  String _selectedUrgent = 'Низкая';
   String _selectedPriority = 'Низкий';
   String _selectedStatus = 'Низкий';
   
   final List<String> _priorityOptions = ['Низкий', 'Средний', 'Высокий'];
   List<String> _selectedTags = []; // Or List<Tag> if using Tag class
-  
+  final List<String> _urgentOptions = ['Низкая', 'Средняя', 'Высокая'];
   final List<String> _statusOptions = ['Низкий', 'Средний', 'Высокий'];
   final _predefinedTags = {
-    'Учеба': Colors.black, // Black for "учеба"
-    'Здоровье': Colors.green, // Green for "здоровье"
+    'Учеба': 'Учеба', // Black for "учеба"
+    'Здоровье': 'Здоровье', // Green for "здоровье"
     'Работа': Colors.amber, // Amber for "работа"
   };
   final _titleController = TextEditingController();
@@ -53,9 +56,9 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       _dueDateController.text = widget.task!.dueDate!.toIso8601String();                                                                                  
       _selectedPriorityId = widget.task!.priorityId;
       _selectedStatusId = widget.task!.statusId;
+      _buttonPaddingSize = 40;
     }                             
   }                                                   
-
   // Сохранение задачи
   Future<void> _saveTask() async {
   final prefs = await SharedPreferences.getInstance();
@@ -153,7 +156,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               TextField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Описание'),
-                maxLines: 2,
               ),
               const SizedBox(height: 10), 
               // Поле ввода для даты выполнения
@@ -167,23 +169,47 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030),
+                    //locale: const Locale('ru'),
                   );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _dueDateController.text = pickedDate.toIso8601String();
-                    });
+
+                  if (pickedDate != null ) {
+                    // Выбор времени
+                    final pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 12, minute: 0),
+                      // locale: const Locale('ru', 'RU')
+                    );
+
+                    if (pickedTime != null) {
+                      // Объединение даты и времени
+                      final selectedDateTime = DateTime(
+                        pickedDate.year,
+                        pickedDate.month,
+                        pickedDate.day,
+                        pickedTime.hour,
+                        pickedTime.minute,
+                      );
+                      // Сохранение неформатированной даты в переменной
+                      final unformattedDateString = selectedDateTime.toIso8601String();
+
+                      // Форматирование даты и времени для отображения
+                      final formattedDateTimeString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(selectedDateTime);
+
+      // Отображение выбранной даты и времени
+                      setState(() {
+                        _dueDateController.text = formattedDateTimeString;
+                      });
+                    }
                   }
                 },
-                decoration: const InputDecoration(labelText: 'Дата выполнения'),
-              ),
+  decoration: const InputDecoration(labelText: 'Дата выполнения'),
+),
               const SizedBox(height: 10), 
               const Align(
-                alignment: Alignment.center,
                 child: Text('Приоритет задачи'),
               ),
               const SizedBox(height: 10), // Add some spacing between label and radios
               Align(
-                alignment: Alignment.center,
                 child: DropdownButton<String>(
                   value: _selectedPriority,
                   items: _priorityOptions.map((value) {
@@ -203,14 +229,37 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   },
                 ),
               ),
+              const Align(
+                child: Text('Срочность задачи'),
+              ),
+              const SizedBox(height: 10), // Add some spacing between label and radios
+              Align(
+                child: DropdownButton<String>(
+                  value: _selectedUrgent,
+                  items: _urgentOptions.map((value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14) 
+                        ),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedUrgent = newValue!;
+                    });
+                  },
+                ),
+              ),
               Visibility(
                 // visible: !_isCreatingNewTask,
-                visible: true,
+                visible: !true,
                 child: Column(
                   children: [
                     const SizedBox(height: 10), 
                     const Align(
-                      alignment: Alignment.center,
                       child: Text('Статус задачи'),
                     ),
                     const SizedBox(height: 10), // Add some spacing between label and radios
@@ -239,57 +288,64 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   ],
                 ),
               ),
-              const Align(
-                      alignment: Alignment.center,
-                      child: Text('Теги'),
-                    ),
+              // const Align(
+              //         alignment: Alignment.center,
+              //         child: Text('Теги'),
+              //       ),
               const SizedBox(height: 20),
-              SizedBox(
-                height: 200,
-                width: 500,
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10, // Adjust vertical spacing between rows as needed
-                  children: [
-                    // Predefined tags
-                    ..._predefinedTags.entries.map((entry) => CustomTag(
-                      text: entry.key,
-                      color: entry.value,
-                      onDelete: () {
-                        setState(() {
-                          _selectedTags.remove(entry.key);
-                        });
-                      },
-                    )),
-                    // Selected tags
-                    ..._selectedTags.map((tag) => CustomTag(
-                    text: tag,
-                    color: Colors.blue,
-                    onDelete: () {
-                      setState(() {
-                        _selectedTags.remove(tag);
-                      });
-                    },
-                   )),
+              // SizedBox(
+              //   height: 200,
+              //   width: 500,
+              //   child: Wrap(
+              //     spacing: 10,
+              //     runSpacing: 10, // Adjust vertical spacing between rows as needed
+              //     children: [
+              //       // Predefined tags
+              //       ..._predefinedTags.entries.map((entry) => CustomTag(
+              //         text: entry.key,
+              //         color: entry.value,
+              //         onDelete: () {
+              //           setState(() {
+              //             _selectedTags.remove(entry.key);
+              //           });
+              //         },
+              //       )),
+              //       // Selected tags
+              //       ..._selectedTags.map((tag) => CustomTag(
+              //       text: tag,
+              //       color: Colors.blue,
+              //       onDelete: () {
+              //         setState(() {
+              //           _selectedTags.remove(tag);
+              //         });
+              //       },
+              //      )),
 
-                    // Add new tag
-                    CustomTag(
-                      text: 'Добавить',
-                      color: Colors.grey[200]!,
-                      onDelete: () {
-                        // Implement logic to add a new tag
-                      },
-                    ),
-                  ],
-                ),
-              ),
-
-              
-              // Tag Selection
+              //       // Add new tag
+              //       CustomTag(
+              //         text: 'Добавить',
+              //         color: Colors.grey[200]!,
+              //         onDelete: () {
+              //           // Implement logic to add a new tag
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              CustomMultiDropDownList(
+              title: 'Теги',
+              predefinedTags: _predefinedTags.keys.toList(), // Assuming _predefinedTags is your map
+              selectedTags: _selectedTags, // Assuming _selectedTags is your list of selected tags
+              onSelectionChanged: (selectedTags) {
+                setState(() {
+                  _selectedTags = selectedTags;
+                });
+              },
+            ),
 
 
               // Кнопка сохранения задачи
-              const SizedBox(height: 40), 
+              SizedBox(height: _buttonPaddingSize), 
               ElevatedButton(
                 onPressed: _saveTask,
                 child: const Text('Сохранить'),

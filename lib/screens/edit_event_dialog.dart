@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/models/event.dart'; 
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:intl/intl.dart';
 
 class EditEventScreen extends StatefulWidget { 
   const EditEventScreen({super.key, this.event});
@@ -16,7 +16,8 @@ class EditEventScreen extends StatefulWidget {
 
 class _EditEventScreenState extends State<EditEventScreen> {
 
-  bool _isCreatingNewEvent = false;
+  bool _isCreatingNewEvent = true;
+  bool _isAllDay = false;
   // Контроллеры для полей ввода
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -68,8 +69,9 @@ class _EditEventScreenState extends State<EditEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Создать/Редактировать событие'),
+       appBar: AppBar(
+        title: Text(
+          _isCreatingNewEvent ? 'Создать событие' : 'Изменить событие'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -81,12 +83,13 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Название'),
               ),
+              const SizedBox(height: 10,),
               // Поле ввода для описания задачи
               TextField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Описание'),
-                maxLines: 5,
               ),
+              const SizedBox(height: 10,),
               TextField(
                 controller: _startDateController,
                 readOnly: true, // Дата не редактируется вручную
@@ -97,16 +100,43 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030),
+                    //locale: const Locale('ru'),
                   );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _endDateController.text = pickedDate.toIso8601String();
-                    });
+
+                  if (pickedDate != null ) {
+                    // Выбор времени
+                    final pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 12, minute: 0),
+                      // locale: const Locale('ru', 'RU')
+                    );
+
+                    if (pickedTime != null) {
+                      // Объединение даты и времени
+                      final selectedDateTime = DateTime(
+                        pickedDate.year,
+                        pickedDate.month,
+                        pickedDate.day,
+                        pickedTime.hour,
+                        pickedTime.minute,
+                      );
+                      // Сохранение неформатированной даты в переменной
+                      final unformattedDateString = selectedDateTime.toIso8601String();
+
+                      // Форматирование даты и времени для отображения
+                      final formattedDateTimeString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(selectedDateTime);
+
+      // Отображение выбранной даты и времени
+                      setState(() {
+                        _startDateController.text = formattedDateTimeString;
+                      });
+                    }
                   }
                 },
                 decoration: const InputDecoration(labelText: 'Дата начала события'),
               ),
               // Поле ввода для даты выполнения
+              const SizedBox(height: 10,),
               TextField(
                 controller: _endDateController,
                 readOnly: true, // Дата не редактируется вручную
@@ -117,15 +147,57 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     initialDate: DateTime.now(),
                     firstDate: DateTime(2000),
                     lastDate: DateTime(2030),
+                    //locale: const Locale('ru'),
                   );
-                  if (pickedDate != null) {
-                    setState(() {
-                      _endDateController.text = pickedDate.toIso8601String();
-                    });
+
+                  if (pickedDate != null ) {
+                    // Выбор времени
+                    final pickedTime = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 12, minute: 0),
+                      // locale: const Locale('ru', 'RU')
+                    );
+
+                    if (pickedTime != null) {
+                      // Объединение даты и времени
+                      final selectedDateTime = DateTime(
+                        pickedDate.year,
+                        pickedDate.month,
+                        pickedDate.day,
+                        pickedTime.hour,
+                        pickedTime.minute,
+                      );
+                      // Сохранение неформатированной даты в переменной
+                      final unformattedDateString = selectedDateTime.toIso8601String();
+
+                      // Форматирование даты и времени для отображения
+                      final formattedDateTimeString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(selectedDateTime);
+
+      // Отображение выбранной даты и времени
+                      setState(() {
+                        _endDateController.text = formattedDateTimeString;
+                      });
+                    }
                   }
                 },
                 decoration: const InputDecoration(labelText: 'Дата окончания события'),
               ),
+              const SizedBox(height: 10,),
+                Row(              
+                  children: [
+                    const Text('Весь день'), // Label text
+                    const SizedBox(width: 8), // Add some space between checkbox and label
+                    Checkbox(value: _isAllDay,
+                      onChanged: (newValue) {
+                       setState(() {
+                        _isAllDay = newValue!;
+                        }
+                       );
+                     },
+                    ), // Checkbox
+                  ],
+                ),
+                const SizedBox(height: 40,),
               // Кнопка сохранения задачи
               ElevatedButton(
                 onPressed: _saveEvent,
