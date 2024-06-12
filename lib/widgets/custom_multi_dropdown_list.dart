@@ -1,120 +1,72 @@
 import 'package:flutter/material.dart';
 
-class CustomMultiDropDownList extends StatefulWidget {
+class CustomMultiDropdownList extends StatefulWidget { // Callback for selected tags
 
-  const CustomMultiDropDownList({
+  const CustomMultiDropdownList({
     super.key,
-    required this.title,
-    required this.predefinedTags,
-    required this.selectedTags,
-    required this.onSelectionChanged,
+    required this.tags,
+    this.selectedTags = const [],
+    required this.onSelected,
   });
-  final String title;
-  final List<String> predefinedTags;
-  final List<String> selectedTags;
-  final Function(List<String>) onSelectionChanged;
+  final List<String> tags; // List of all available tags
+  final List<String> selectedTags; // Pre-selected tags (optional)
+  final Function(List<String>) onSelected;
 
   @override
-  // ignore: library_private_types_in_public_api
-  _CustomMultiDropDownListState createState() => _CustomMultiDropDownListState();
+  State<CustomMultiDropdownList> createState() => _CustomMultiDropdownListState();
 }
 
-class _CustomMultiDropDownListState extends State<CustomMultiDropDownList> {
-  final _selectedTags = <String>[];
-   var _filter = '';
+class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
+  List<String> _selectedTags = [];
 
   @override
   void initState() {
     super.initState();
-    _selectedTags.addAll(widget.selectedTags);
+    _selectedTags = widget.selectedTags.toList();
   }
 
-  Future<void> _openDropdown() async {
-    await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(widget.title),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: const InputDecoration(labelText: 'Поиск'),
-              onChanged: (value) {
-                setState(() {
-                  _filter = value;
-                });
-              },
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: widget.predefinedTags.length,
-                itemBuilder: (context, index) {
-                  final tag = widget.predefinedTags[index];
-                  final isSelected = _selectedTags.contains(tag);
-                  return ListTile(
-                    title: Text(tag),
-                    trailing: Checkbox(
-                      value: isSelected,
-                      onChanged: (value) {
-                        setState(() {
-                          if (value!) {
-                            _selectedTags.add(tag);
-                          } else {
-                            _selectedTags.remove(tag);
-                          }
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              widget.onSelectionChanged(_selectedTags);
-            },
-            child: const Text('Применить'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Отмена'),
-          ),
-        ],
-      ),
-    );
+  void _onItemSelected(String tag) {
+    setState(() {
+      if (_selectedTags.contains(tag)) {
+        _selectedTags.remove(tag);
+      } else {
+        _selectedTags.add(tag);
+      }
+    });
+    widget.onSelected(_selectedTags);
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedTagsString = _selectedTags.join(', ');
+    return DropdownButtonFormField<String>(
+      hint: const Text('Select Tags'),
+      isExpanded: true, // Occupy full width
+      icon: const Icon(Icons.add),
+      items: widget.tags
+          .map((tag) => DropdownMenuItem<String>(
+                value: tag,
+                child: Text(tag),
+              ))
+          .toList(),
+      onChanged: (tag) => _onItemSelected(tag!),
+      selectedItemBuilder: (context) => _selectedTags.isEmpty
+        ? const [] // Return an empty list if no tags selected
+        : [_buildSelectedTags(context)], // Return the list of chips otherwise
 
+    );
+  }
+
+  Widget _buildSelectedTags(BuildContext context) {
+    final selectedTagsText = _selectedTags.join(', '); // Join tags with comma
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
         borderRadius: BorderRadius.circular(5),
       ),
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          Expanded( // Wrap content with Expanded
-            child: Text(
-              selectedTagsString.isEmpty ? '${widget.title}:' : '${widget.title}: $selectedTagsString',
-              style: const TextStyle(fontSize: 16),
-            ),
-          ),
-          const SizedBox(width: 10),
-          IconButton(
-            onPressed: _openDropdown,
-            icon: const Icon(Icons.add),
-          ),
-        ],
+      child: Text(
+        selectedTagsText,
+        style: const TextStyle(fontSize: 14),
       ),
     );
   }

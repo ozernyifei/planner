@@ -17,7 +17,7 @@ class Task {
       id: map['id'] ?? 0,
       title: map['title'],
       description: map['description'] ?? '',
-      dueDate: DateTime.parse(map['due_date']), 
+      dueDate: map['due_date'] != null ? DateTime.parse(map['due_date']) : null, 
       userId: map['user_id'],
       priorityId: map['priority_id'],
       statusId: map['status_id'],
@@ -47,6 +47,8 @@ class Task {
   }
 
   Future<void> addTaskToDatabase(Database database) async {
+    print(dueDate);
+    
     await database.insert(
       'task', 
       toMap(), 

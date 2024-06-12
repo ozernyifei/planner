@@ -3,12 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 //import 'package:planner/1placeholders/calendar_placeholder.dart';
 import 'package:planner/1placeholders/calendar_filled.dart';
 //import 'package:planner/1placeholders/task_filled.dart';
-import 'package:planner/1placeholders/task_placeholder.dart';
+//import 'package:planner/1placeholders/task_placeholder.dart';
 import 'package:planner/screens/auth_screen.dart';
 // import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
-// import 'package:planner/screens/task_screen.dart';
+import 'package:planner/screens/task_screen.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 
 

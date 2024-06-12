@@ -23,10 +23,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   double _buttonPaddingSize = 120;
   int _selectedPriorityId = 1;
   int _selectedStatusId = 1;
-  int _selectedUrgentId = 1;
+  // int _selectedUrgentId = 1;
   String _selectedUrgent = 'Низкая';
   String _selectedPriority = 'Низкий';
   String _selectedStatus = 'Низкий';
+  var unformattedDateString = '';
   
   final List<String> _priorityOptions = ['Низкий', 'Средний', 'Высокий'];
   List<String> _selectedTags = []; // Or List<Tag> if using Tag class
@@ -40,6 +41,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dueDateController = TextEditingController();
+
 
 
 
@@ -104,9 +106,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         // Update task properties from screen inputs
         task.title = _titleController.text;
         task.description = _descriptionController.text;
-        task.dueDate = _dueDateController.text == null
-            ? null
-            : DateTime.parse(_dueDateController.text);
+        task.dueDate = _dueDateController.text.isEmpty
+        ? null
+        : DateTime.parse(unformattedDateString); 
+            // ? DateTime.parse("")
+            // : DateTime.parse(_dueDateController.text);
 
         await task.addTaskToDatabase(database);
         await database.close();
@@ -124,7 +128,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
     }
   }
 
-  //TODO(lebowskd): 
+  // TODO(lebowskd): 
   // 'id': id,
   //     'title': title, check
   //     'description': description, check
@@ -190,7 +194,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         pickedTime.minute,
                       );
                       // Сохранение неформатированной даты в переменной
-                      final unformattedDateString = selectedDateTime.toIso8601String();
+                      unformattedDateString = selectedDateTime.toIso8601String();
 
                       // Форматирование даты и времени для отображения
                       final formattedDateTimeString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(selectedDateTime);
@@ -202,8 +206,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     }
                   }
                 },
-  decoration: const InputDecoration(labelText: 'Дата выполнения'),
-),
+                  decoration: const InputDecoration(labelText: 'Дата выполнения'),
+              ),
               const SizedBox(height: 10), 
               const Align(
                 child: Text('Приоритет задачи'),
@@ -331,24 +335,20 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               //     ],
               //   ),
               // ),
-              CustomMultiDropDownList(
-              title: 'Теги',
-              predefinedTags: _predefinedTags.keys.toList(), // Assuming _predefinedTags is your map
-              selectedTags: _selectedTags, // Assuming _selectedTags is your list of selected tags
-              onSelectionChanged: (selectedTags) {
-                setState(() {
+              CustomMultiDropdownList(
+                tags: _predefinedTags.keys.toList(), // List of all tags (from map keys)
+                selectedTags: _selectedTags, // List of pre-selected tags
+                onSelected: (selectedTags) => setState(() {
                   _selectedTags = selectedTags;
-                });
-              },
-            ),
+                }),
+              ),
 
 
               // Кнопка сохранения задачи
               SizedBox(height: _buttonPaddingSize), 
               ElevatedButton(
                 onPressed: _saveTask,
-                child: const Text('Сохранить'),
-                
+                child: const Text('Сохранить'),              
               ),
             ],
           ),
