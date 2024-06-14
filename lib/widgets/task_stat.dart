@@ -1,59 +1,61 @@
 import 'package:flutter/material.dart';
 
-class TaskStat extends StatefulWidget { // Number of tasks to display
+class TaskStat extends StatelessWidget {
 
   const TaskStat({super.key, required this.taskCount});
   final int taskCount;
 
   @override
-  _TaskStatState createState() => _TaskStatState();
-}
-
-class _TaskStatState extends State<TaskStat> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.grey[200],
+      height: MediaQuery.of(context).size.height * 1/3, // Take 1/3 of screen height
+      decoration:  BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        border: Border.all(
+          color: Colors.black26,
+          width: 1.5
+        )
       ),
+      padding: const EdgeInsets.all(24),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.taskCount > 0)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'There are ${widget.taskCount} tasks for you today.',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Navigate to task list screen
-                    await Navigator.pushNamed(context, '/tasks'); // Replace '/tasks' with your actual route name
-                  },
-                  child: const Text('View Tasks'),
-                ),
-              ],
+          const Text(
+            'Сегодняшнее количество задач:',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          if (widget.taskCount == 0)
-            Column(
-              children: [
-                const Text(
-                  'Add a task to plan your day.',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    // Navigate to task creation screen
-                    await Navigator.pushNamed(context, '/create-task'); // Replace '/create-task' with your actual route name
-                  },
-                  child: const Text('Create Task'),
-                ),
-              ],
+          ),
+          const SizedBox(height: 16),
+          Text(
+            textAlign: TextAlign.center,
+            taskCount.toString(),
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: taskCount == 0 ? Colors.green : Colors.blue,
             ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            textAlign: TextAlign.center,
+            taskCount == 0 ? 'Можно отдохнуть' : 'Есть над чем поработать',
+            style: const TextStyle(
+              
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              // Navigate to tasks screen here (replace with your logic)
+            },
+            child: const Text('Перейти к задачам'),
+          ),
         ],
       ),
     );

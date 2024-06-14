@@ -9,7 +9,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class EditTaskScreen extends StatefulWidget {
 
   const EditTaskScreen({super.key, this.task}); 
-
   final Task? task;
 
   @override
@@ -153,6 +152,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                   );
                   if (pickedDate != null) {
                     final pickedTime = await showTimePicker(
+                      // ignore: use_build_context_synchronously
                       context: context,
                       initialTime: const TimeOfDay(hour: 12, minute: 0),
                     );

@@ -106,6 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   password);
                 if (mounted && isLoggedIn) {
                   await UserService.saveLoggedInUser(username, await Encrypt.generateToken());
+                  // ignore: use_build_context_synchronously
                   await Navigator.pushReplacementNamed(context, '/home');
                 }
                 else {

@@ -44,7 +44,7 @@ class Event {
     };
   }
 
-  // Future<void> addEventToDatabase(Database database) async {
+  // Future<void> addToDatabase(Database database) async {
   //   await database.insert(
   //     'event', 
   //     toMap(), 

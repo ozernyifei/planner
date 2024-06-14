@@ -1,12 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
-import 'package:planner/classes/user_service.dart'; // Import EventStat
+import 'package:planner/classes/user_service.dart'; 
 import 'package:planner/widgets/event_stat.dart';
-import 'package:planner/widgets/task_stat.dart'; // Import TaskStat
+import 'package:planner/widgets/task_stat.dart'; 
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -64,12 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16),
                   ),
             //const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to task creation screen
-              },
-              child: const Text('Создать задачу'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Navigate to task creation screen
+            //   },
+            //   child: const Text('Создать задачу'),
+            // ),
           ],
         ),
       ),
