@@ -28,6 +28,27 @@ class DbHelper {
   Future<void> deleteTask(Database database, int id) async => database.delete('task', where: 'id = ?', whereArgs: [id]);
   Future<void> deleteEvent(Database database, int id) async => database.delete('event', where: 'id = ?', whereArgs: [id]);
 
+  Future<int> getTaskCount(Database database, int userId) async {
+    final tasksData = await database.rawQuery('''
+      SELECT COUNT(*)
+      FROM task
+      WHERE user_id = ?
+      ''', [userId]);
+
+    final count = tasksData.first['COUNT(*)']! as int;
+    return count;
+  }
+
+  Future<int> getEventCount(Database database, int userId) async {
+    final eventsData = await database.rawQuery('''
+      SELECT COUNT(*)
+      FROM event
+      WHERE user_id = ? AND start_time >= ?
+      ''', [userId, DateTime.now().toString()]);
+
+    final count = eventsData.first['COUNT(*)']! as int;
+    return count;
+  }
 
   
 
@@ -42,6 +63,8 @@ class DbHelper {
     await _createTableTag(database);
     await _createTableUserData(database);
     await _createTableUserLogin(database);
+    await _createTableEvent(database);
+    
     //await _createTableTaskReminder(database);
   }
 
@@ -87,7 +110,7 @@ class DbHelper {
     await db.insert('task', task.toMap());
   }
   
-  Future<void> createTableEvent(Database database) async => database.execute('''
+  Future<void> _createTableEvent(Database database) async => database.execute('''
       CREATE TABLE IF NOT EXISTS event (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -95,7 +118,8 @@ class DbHelper {
         end_time TEXT NOT NULL,
         color INTEGER NOT NULL,
         is_all_day BOOL NOT NULL,
-        user_id INTEGER NOT NULL
+        user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES user_data(id) ON DELETE CASCADE
       )
     ''');
 
@@ -162,7 +186,7 @@ class DbHelper {
       priority_id INTEGER NOT NULL REFERENCES priority(id),
       status_id INTEGER NOT NULL REFERENCES status(id),
       tag_id INTEGER REFERENCES tag(id),
-      FOREIGN KEY (user_id) REFERENCES user_data(user_id) ON DELETE CASCADE
+      FOREIGN KEY (user_id) REFERENCES user_data(id) ON DELETE CASCADE
     )
   ''');
   Future<void> _createTableSubtask(Database database) async => database.execute('''

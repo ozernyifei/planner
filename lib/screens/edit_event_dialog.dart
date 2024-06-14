@@ -61,7 +61,6 @@ class _EditEventScreenState extends State<EditEventScreen> {
       if (result.isNotEmpty) {
         // User ID found in SQLite database
         final userId = result.first['id']! as int;
-
       }
     }
   }
@@ -199,7 +198,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                     ), // Checkbox
                   ],
                 ),
-                const SizedBox(height: 40,),
+                const SizedBox(height: 40),
               // Кнопка сохранения задачи
               ElevatedButton(
                 onPressed: _saveEvent,
