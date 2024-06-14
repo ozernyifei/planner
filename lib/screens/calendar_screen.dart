@@ -32,9 +32,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
         floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Нажмите на FAB, чтобы перейти к edit_task.dart
-          await Navigator.push(
+          await Navigator.pushNamed(
             context,
-            MaterialPageRoute(builder: (context) => const EditEventScreen()),
+            '/create-event',
           );
         },
         child: const Icon(Icons.add),

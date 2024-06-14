@@ -66,6 +66,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
     }
   }
 
+  // TODO(lebowskd): add check startDate <= endDate 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:planner/1placeholders/task_filled.dart';
+import 'package:planner/models/task.dart';
+//import 'package:planner/1placeholders/task_filled.dart';
 
 class TaskBox extends StatelessWidget {
   const TaskBox({
@@ -29,7 +30,7 @@ class TaskBox extends StatelessWidget {
                   children: [
                     Expanded( // Expand task name
                       child: Text(
-                        task.name,
+                        task.title,
                         style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -67,40 +68,42 @@ class TaskBox extends StatelessWidget {
                           ),
                         );
                       },
-                icon: const Icon(Icons.more_vert), // 3-dot icon
+                     icon: const Icon(Icons.more_vert), // 3-dot icon
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      task.description,
-                      style: const TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
+                    if (task.description != null)
+                      Text(
+                        task.description!,
+                        style: const TextStyle(fontSize: 16),
+                        textAlign: TextAlign.left,
+                      ),
                     const SizedBox(height: 16),
     
                     // Time and tags on separate lines
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start, // Align vertically
                   children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time_rounded),
-                        const SizedBox(width: 8),
-                        Text(DateFormat('d MMM yyyy HH:mm').format(task.endTime)),
-                      ],
-                    ),
+                    if (task.dueDate != null)
+                      Row(
+                        children: [
+                          const Icon(Icons.access_time_rounded),
+                          const SizedBox(width: 8),
+                          Text(DateFormat('d MMM yyyy HH:mm').format(task.dueDate!)),
+                        ],
+                      ),
                     const SizedBox(width: 16), // Add spacing between time and tags
                     if (task.tags?.isNotEmpty ?? false) 
                     Wrap(
                       spacing: 5,
                       children: task.tags!.map((tag) => Chip(
-                        avatar: const CircleAvatar(
+                        avatar: CircleAvatar(
                           radius: 5,
-                          backgroundColor: Colors.yellow, // Get color based on tag name
-                          child: Text(''), // Empty text
+                          backgroundColor: Color(tag.color), // Get color based on tag name
+                          child: const Text(''), // Empty text
                         ),
-                        label: Text(tag, style: const TextStyle(fontSize: 12)), // Smaller font size
+                        label: Text(tag.title, style: const TextStyle(fontSize: 12)), // Smaller font size
                       )).toList(),
                     ) else const SizedBox(),
                   ],

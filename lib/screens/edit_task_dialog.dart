@@ -74,17 +74,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           whereArgs: [username],
           limit: 1);
       if (result.isNotEmpty) {
-        // User ID found in SQLite database
         final userId = result.first['id']! as int;
-
-        // Proceed with saving the task
         final task = widget.task ?? Task(
           title: '',
           priorityId: _selectedPriorityId, 
           statusId: _selectedStatusId, 
-          userId: userId, // Add userId here
+          userId: userId, 
         );
-            // Map status and priority names to their corresponding IDs
         final statusIdMap = {
           'Низкий': 1,
           'Средний': 2,
@@ -95,22 +91,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           'Средний': 2,
           'Высокий': 3,
         };
-
-        // Convert status and priority names to IDs using the maps
         final statusId = statusIdMap[_selectedStatus]!;
         final priorityId = priorityIdMap[_selectedPriority]!;
 
-        // Update the task object with IDs
         task.statusId = statusId;
         task.priorityId = priorityId;
-        // Update task properties from screen inputs
         task.title = _titleController.text;
         task.description = _descriptionController.text;
         task.dueDate = _dueDateController.text.isEmpty
         ? null
         : DateTime.parse(unformattedDateString); 
-            // ? DateTime.parse("")
-            // : DateTime.parse(_dueDateController.text);
 
         await task.addTaskToDatabase(database);
         await database.close();
@@ -118,7 +108,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           Navigator.pop(context);
         }
       } else {
-        //TODO(lebowskd):
+        // TODO(lebowskd):
         //  Handle the case where user ID cannot be found in SQLite
         // (e.g., show an error message or prevent saving)
       }
@@ -127,16 +117,6 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       // (e.g., show an error message or prevent saving)
     }
   }
-
-  // TODO(lebowskd): 
-  // 'id': id,
-  //     'title': title, check
-  //     'description': description, check
-  //     'dueDate': dueDate?.toIso8601String(), check
-  //     'user_id': userId, 
-  //     'priorityId': priorityId,  check
-  //     'statusId': statusId,
-  //     'tagId': tagId,
 
   @override
   Widget build(BuildContext context) {
@@ -150,24 +130,20 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              // Поле ввода для названия задачи
               TextField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Название'),
               ),
               const SizedBox(height: 10), 
-              // Поле ввода для описания задачи
               TextField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Описание'),
               ),
               const SizedBox(height: 10), 
-              // Поле ввода для даты выполнения
               TextField(
                 controller: _dueDateController,
                 readOnly: true, // Дата не редактируется вручную
                 onTap: () async {
-                  // Открытие календаря для выбора даты
                   final pickedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
@@ -175,17 +151,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     lastDate: DateTime(2030),
                     //locale: const Locale('ru'),
                   );
-
-                  if (pickedDate != null ) {
-                    // Выбор времени
+                  if (pickedDate != null) {
                     final pickedTime = await showTimePicker(
                       context: context,
                       initialTime: const TimeOfDay(hour: 12, minute: 0),
-                      // locale: const Locale('ru', 'RU')
                     );
-
                     if (pickedTime != null) {
-                      // Объединение даты и времени
                       final selectedDateTime = DateTime(
                         pickedDate.year,
                         pickedDate.month,
@@ -193,20 +164,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                         pickedTime.hour,
                         pickedTime.minute,
                       );
-                      // Сохранение неформатированной даты в переменной
                       unformattedDateString = selectedDateTime.toIso8601String();
-
-                      // Форматирование даты и времени для отображения
                       final formattedDateTimeString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(selectedDateTime);
-
-      // Отображение выбранной даты и времени
+      
                       setState(() {
                         _dueDateController.text = formattedDateTimeString;
                       });
                     }
                   }
                 },
-                  decoration: const InputDecoration(labelText: 'Дата выполнения'),
+                decoration: const InputDecoration(labelText: 'Дата выполнения'),
               ),
               const SizedBox(height: 10), 
               const Align(

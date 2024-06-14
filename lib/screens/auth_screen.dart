@@ -40,7 +40,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             const SizedBox(height: 40),
             SizedBox(
-              
               width: 0.9 * MediaQuery.of(context).size.width,
               child: TextFormField(
                 controller: _usernameController,
@@ -135,7 +134,6 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
   Future<void> _showUserNotLoggedInError() async {
-    // Display error message using appropriate UI element
     await showError('Такого пользователя не существует', context);
   }
 

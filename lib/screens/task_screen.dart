@@ -6,7 +6,7 @@ import 'package:planner/classes/db_helper.dart';
 import 'package:planner/classes/user_service.dart';
 import 'package:planner/models/task.dart';
 import 'package:planner/screens/edit_task_dialog.dart';
-//import 'package:planner/widgets/task_box.dart';
+import 'package:planner/widgets/task_box.dart';
 
 
 class TaskScreen extends StatefulWidget {
@@ -60,39 +60,8 @@ class _TaskScreenState extends State<TaskScreen> {
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           final task = tasks[index];
-          return ListTile(
-            title: Text(task.title),
-            subtitle: Text(task.description!),
-            trailing: IconButton(
-              onPressed: () async {
-                await showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Настройки задачи'),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: const Text('Редактировать'),
-                          onTap: () {
-                            _editTask(context, task);
-                          },
-                        ),
-                        ListTile(
-                          title: const Text('Удалить'),
-                          onTap: () {
-                            _deleteTask(task.id!);
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.more_vert),
-            ),
-          );
+          return TaskBox(task: task);
+          
         },
       ),
       floatingActionButton: FloatingActionButton(

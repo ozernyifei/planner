@@ -1,3 +1,4 @@
+import 'package:planner/models/tag.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Task {
@@ -21,9 +22,11 @@ class Task {
       userId: map['user_id'],
       priorityId: map['priority_id'],
       statusId: map['status_id'],
-
     );
   }
+
+  
+
   final int? id;
   String title;
   String? description;
@@ -31,6 +34,7 @@ class Task {
   int userId;
   int priorityId;
   int statusId;
+  List<Tag>? tags;
 
 
   Map<String, dynamic> toMap() {
@@ -48,7 +52,6 @@ class Task {
 
   Future<void> addTaskToDatabase(Database database) async {
     print(dueDate);
-    
     await database.insert(
       'task', 
       toMap(), 
@@ -56,14 +59,27 @@ class Task {
   }
 
   static Future<List<Task>> getTasksFromDatabase(Database database) async {
+  final tasksData = await database.rawQuery('''
+    SELECT t.*, tg.tag_id, tg.title, tg.color
+    FROM task t
+    INNER JOIN task_tag tt ON t.id = tt.task_id
+    INNER JOIN tag tg ON tt.tag_id = tg.id
+  ''');
 
-    final tasksData = await database.query('task'); 
-    final tasks = <Task>[];
-    for (final row in tasksData) {
-      tasks.add(Task.fromMap(row));
+  final tasks = <Task>[];
+  for (final row in tasksData) {
+    final taskId = row['id']! as int;
+    final existingTask = tasks.firstWhere((task) => task.id == taskId);
+
+    existingTask.tags?.add(
+      Tag(
+        id: row['tag_id']! as int,
+        title: row['title']! as String,
+        color: row['color']! as int,
+      ),
+    );
     }
 
-    return tasks;
-  }
-
+  return tasks;
+}
 }

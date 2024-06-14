@@ -5,6 +5,8 @@ import 'package:planner/1placeholders/calendar_filled.dart';
 //import 'package:planner/1placeholders/task_filled.dart';
 //import 'package:planner/1placeholders/task_placeholder.dart';
 import 'package:planner/screens/auth_screen.dart';
+import 'package:planner/screens/edit_event_dialog.dart';
+import 'package:planner/screens/edit_task_dialog.dart';
 // import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/home_screen.dart';
 import 'package:planner/screens/settings_screen.dart';
@@ -32,11 +34,15 @@ class MainApp extends StatelessWidget {
       routes: {
         '/auth': (context) => AuthScreen(),
         '/home': (context) => MyHomePage(),
+        '/tasks': (context) => TaskScreen(),
+        '/events': (context) => CalendarScreen(),
+        '/create-task': (context) => const EditTaskScreen(),
+        '/create-event': (context) => const EditEventScreen(),  
       },
       supportedLocales: const [
         Locale('en'),
         Locale('ru'),
-                ],
+      ],
       title: 'To-do list',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
