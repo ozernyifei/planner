@@ -1,6 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:planner/classes/db_helper.dart';
 import 'package:planner/classes/user_service.dart';
@@ -51,7 +50,8 @@ class _TaskScreenState extends State<TaskScreen> {
           final task = tasks[index];
           return TaskBox(
             task: task,
-            onDelete: _handleDeleteTask
+            onDelete: _handleDeleteTask,
+            onEdit: _handleEditTask
             ,);
         },
       ),
@@ -84,7 +84,24 @@ class _TaskScreenState extends State<TaskScreen> {
     if (mounted) {
       Navigator.pop(context);
     }
+  }
 
+  void _handleEditTask(Task task) async {
+    final editedTask = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditTaskScreen(task: task),
+      ),
+    );
+    if (editedTask != null) {
+      // Update the task in the state list
+      setState(() {
+        final index = tasks.indexOf(task);
+        if (index != -1) {
+          tasks[index] = editedTask;
+        }
+      });
+    }
   }
 }
 

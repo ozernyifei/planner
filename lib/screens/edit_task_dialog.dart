@@ -54,7 +54,16 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       _isCreatingNewTask = false;
       _titleController.text = widget.task!.title;
       _descriptionController.text = widget.task!.description!;
-      _dueDateController.text = widget.task!.dueDate!.toIso8601String();                                                                                  
+      if (widget.task != null && widget.task!.dueDate != null) {
+        
+        unformattedDateString = widget.task!.dueDate!.toIso8601String();
+        
+        _dueDateController.text = convertIso8601String(unformattedDateString);
+      } else {
+        // Handle the case where dueDate is null (e.g., set default text)
+        _dueDateController.text = ''; // Or set a placeholder text
+        unformattedDateString = '';
+      }                                                                                 
       _selectedPriorityId = widget.task!.priorityId;
       _selectedStatusId = widget.task!.statusId;
       // _selectedUrgentId = widget.task!.ur
@@ -111,7 +120,17 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
          return; // Exit the function if title is empty
         }
         print(task.title);
-        await task.addTaskToDatabase(database);
+        if (_isCreatingNewTask) {
+          await task.addTaskToDatabase(database);
+        }
+        else {
+          await database.update(
+            'task',
+            task.toMap(),
+            where: 'id = ?',
+            whereArgs: [task.id],
+          );
+        }
         await database.close();
 
         
@@ -296,4 +315,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       ),
     );
   }
+  String convertIso8601String(String iso8601String) {
+  // Parse the ISO 8601 string as a DateTime object
+  final dateTime = DateTime.parse(iso8601String);
+
+  // Format the DateTime object into the desired new format
+  final formattedDateString = DateFormat('dd MMMM yyyy HH:mm', 'ru').format(dateTime);
+
+  return formattedDateString;
+}
 }

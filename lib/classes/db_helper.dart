@@ -6,7 +6,7 @@ import 'package:planner/models/task.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static String get _databaseName => 'test6.db';
+  static String get _databaseName => 'test7.db';
 
   Database? _database;
 

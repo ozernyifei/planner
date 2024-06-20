@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:planner/classes/db_helper.dart';
+import 'package:planner/models/event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-
-class Event {
-  Event(this.title);
-  final String title;
-}
 
 class CalendarScreen extends StatefulWidget {
   @override
@@ -15,10 +12,26 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final CalendarController _calendarController = CalendarController();
+  
+  final _eventList = <Event>[]; // Store events in a state variable
+
+  Future<void> _updateCalendar() async {
+    final events = await getEvents(); // Call getEvents asynchronously
+
+    // Update the state variable with the fetched events
+    setState(() {
+      _eventList..clear()
+      ..addAll(events);
+    });
+// Use the awaited list
+    // ... update SfCalendar with dataSource
+    print(_eventList[1].startDate);
+  }
 
   @override
   void initState() {
     super.initState();
+    _updateCalendar();
   }
 
   @override
@@ -43,36 +56,34 @@ class _CalendarScreenState extends State<CalendarScreen> {
         child: Column(
           children: [
             SfCalendar(
-  controller: _calendarController,
-  view: CalendarView.week,
-  firstDayOfWeek: 1, 
-  monthViewSettings: const MonthViewSettings(
-    numberOfWeeksInView: 5,
-    showAgenda: true,
-    // appointmentTextStyle: TextStyle(
-    //   color: Colors.black,
-    //   fontSize: 16,
-    // ),
-  ),
-  // headerTitleBuilder: (date) {
-  //   return Text(
-  //     '${date.year} - ${date.month}',
-  //     style: TextStyle(fontSize: 18),
-  //   );
-  // },
-  // sources: [
-  //   // Ваш источник данных (CalendarDataSource)
-  // ],
-  onLongPress: (details) {
-    // Обработка долгого нажатия на ячейку
-             },
-            ),
-          ],
+              
+              controller: _calendarController,
+              view: CalendarView.week,
+              firstDayOfWeek: 1, 
+              monthViewSettings: const MonthViewSettings(
+                numberOfWeeksInView: 5,
+                showAgenda: true,
+              ),
+              // headerTitleBuilder: (date) {
+              //   return Text(
+              //     '${date.year} - ${date.month}',
+              //     style: TextStyle(fontSize: 18),
+              //   );
+              // },
+              // sources: [
+              //   // Ваш источник данных (CalendarDataSource)
+              // ],
+              onLongPress: (details) {
+                // Обработка долгого нажатия на ячейку
+              },
+              dataSource: EventDataSource(_eventList) ,
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
-}
 
 Future<CalendarView> loadCalendarView() async {
   final prefs = await SharedPreferences.getInstance();
@@ -82,5 +93,35 @@ Future<CalendarView> loadCalendarView() async {
   }
   else {
     return CalendarView.week;
+  }
+}
+
+Future<List<Event>> getEvents() async {
+  final dbHelper = DbHelper();
+  final db = await dbHelper.database;
+  final List<Map<String, dynamic>> maps = await db.query('event');
+  return List.generate(maps.length, (i) => Event.fromMap(maps[i]));
+}
+
+class EventDataSource extends CalendarDataSource {
+
+  EventDataSource(this.events);
+  final List<Event> events;
+
+  List<Appointment> getAppointments(DateTime startDate, DateTime endDate) {
+    final appointments = <Appointment>[];
+    for (final event in events) {
+      // Assuming your Event model has start and end date properties
+      if (event.startDate.isAfter(startDate) && event.endDate.isBefore(endDate)) {
+        appointments.add(Appointment(
+          startTime: event.startDate,
+          endTime: event.endDate,
+          subject: event.title, // Assuming a title property in Event
+          isAllDay: event.isAllDay,
+          color: event.color,
+        ));
+      }
+    }
+    return appointments;
   }
 }

@@ -44,7 +44,6 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blueAccent,
         ),
-
       ),
 			debugShowCheckedModeBanner: false,
     );

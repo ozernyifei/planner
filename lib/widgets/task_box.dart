@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planner/models/task.dart';
-import 'package:planner/screens/edit_task_dialog.dart';
 //import 'package:planner/1placeholders/task_filled.dart';
 
 class TaskBox extends StatelessWidget {
@@ -10,10 +9,12 @@ class TaskBox extends StatelessWidget {
     super.key,
     required this.task,
     required this.onDelete,
+    required this.onEdit,
   });
 
   final Task task;
   final Function(Task) onDelete;
+  final Function(Task) onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -50,18 +51,11 @@ class TaskBox extends StatelessWidget {
                               children: [
                                 ListTile(
                                   title: const Text('Редактировать'),
-                                  onTap: () async => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditTaskScreen(task: task)
-                                      ),
-                                  )
+                                  onTap: () => onEdit(task),
                                 ),
                                 ListTile(
                                   title: const Text('Завершить'),
-                                  onTap: () {
-                                    
-                                  },
+                                  onTap: () => onDelete(task), 
                                 ),
                                 ListTile(
                                   title: const Text('Удалить'),
@@ -94,7 +88,7 @@ class TaskBox extends StatelessWidget {
                         children: [
                           const Icon(Icons.access_time_rounded),
                           const SizedBox(width: 8),
-                          Text(DateFormat('d MMM yyyy HH:mm').format(task.dueDate!)),
+                          Text(DateFormat('d MMM yyyy HH:mm', 'ru').format(task.dueDate!)),
                         ],
                       ),
                     const SizedBox(width: 16), // Add spacing between time and tags

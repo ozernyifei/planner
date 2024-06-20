@@ -20,7 +20,7 @@ class Event {
       startDate: DateTime.parse(map['start_date']),
       endDate: DateTime.parse(map['end_date']), 
       color: Color(map['color'] as int),
-      isAllDay: map['is_all_day'],
+      isAllDay: map['is_all_day'] == 1 ? true : false,
       userId: map['user_id'],
     );
   }
