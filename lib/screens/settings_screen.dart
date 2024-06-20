@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:planner/classes/view_mode.dart';
 import 'package:planner/screens/edit_userdata_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,18 +13,20 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Future<void> logout() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.remove('user_id');
-  await prefs.remove('username');
-  await prefs.remove('token');
-  await prefs.remove('timestamp');
+  final viewMode = ViewMode();
 
-  // Navigate to AuthScreen
-  if (mounted) {
-    await Navigator.pushReplacementNamed(context, '/auth');
-  } 
-}
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_id');
+    await prefs.remove('username');
+    await prefs.remove('token');
+    await prefs.remove('timestamp');
+
+    // Navigate to AuthScreen
+    if (mounted) {
+      await Navigator.pushReplacementNamed(context, '/auth');
+    } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +39,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             title: const Text('Поменять отображение календаря'),
             onTap: () {
-              // Handle change display logic
-              print('Changing display...');
-              // You might update theme or display settings
+              setState(viewMode.change);
             },
           ),
           ListTile(

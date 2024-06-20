@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planner/models/task.dart';
+import 'package:planner/screens/edit_task_dialog.dart';
 //import 'package:planner/1placeholders/task_filled.dart';
 
 class TaskBox extends StatelessWidget {
+  
   const TaskBox({
     super.key,
     required this.task,
+    required this.onDelete,
   });
 
   final Task task;
+  final Function(Task) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +50,12 @@ class TaskBox extends StatelessWidget {
                               children: [
                                 ListTile(
                                   title: const Text('Редактировать'),
-                                  onTap: () {
-                                    
-                                  },
+                                  onTap: () async => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditTaskScreen(task: task)
+                                      ),
+                                  )
                                 ),
                                 ListTile(
                                   title: const Text('Завершить'),
@@ -58,10 +65,7 @@ class TaskBox extends StatelessWidget {
                                 ),
                                 ListTile(
                                   title: const Text('Удалить'),
-                                  onTap: () {
-                                  
-                                    Navigator.pop(context);
-                                  },
+                                  onTap: () => onDelete(task), 
                                 ),
                               ],
                             ),

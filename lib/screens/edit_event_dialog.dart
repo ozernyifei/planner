@@ -51,18 +51,19 @@ class _EditEventScreenState extends State<EditEventScreen> {
         // User ID found in SQLite database
         final userId = result.first['id']! as int;
         if (_startDateController.text.isNotEmpty && _endDateController.text.isNotEmpty) {
-          final startDate = DateTime.parse(_startDateController.text);
-          final endDate = DateTime.parse(_endDateController.text);
+          final startDate = DateTime.parse(startDateTime!);
+          final endDate = DateTime.parse(endDateTime!);
           if (startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
-            if (_titleController.text.isNotEmpty) {
+            if (_titleController.text.isNotEmpty && _titleController.text != '') {
               await database.insert('event', {
-                'userId': userId,
+                'user_id': userId,
                 'title': _titleController.text,
-                'description': _descriptionController.text,
-                'startDate': startDate.toIso8601String(),
-                'endDate': endDate.toIso8601String(),
-                'isAllDay': _isAllDay ? 1 : 0, // Convert bool to int for database
+                // 'description': _descriptionController.text,
+                'start_date': startDate.toIso8601String(),
+                'end_date': endDate.toIso8601String(),
+                'is_all_day': _isAllDay ? 1 : 0,
               });
+              Navigator.pop(context);
             }
             else {
               if (mounted) {
@@ -73,6 +74,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                   ),
                 );
               }
+              return;
             }
           } else {
             if (mounted) {
@@ -83,6 +85,7 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 ),
               );
             }
+            return;
           }
         }
       }
@@ -105,12 +108,12 @@ class _EditEventScreenState extends State<EditEventScreen> {
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Название'),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               TextField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Описание'),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               TextField(
                 controller: _startDateController,
                 readOnly: true, 
@@ -193,8 +196,8 @@ class _EditEventScreenState extends State<EditEventScreen> {
                       onChanged: (newValue) {
                        setState(() {
                         _isAllDay = newValue!;
-                        }
-                       );
+                       }
+                      );
                      },
                     ), // Checkbox
                   ],

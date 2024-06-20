@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-//import 'package:planner/1placeholders/calendar_placeholder.dart';
-//import 'package:planner/1placeholders/calendar_filled.dart';
-//import 'package:planner/1placeholders/task_filled.dart';
-//import 'package:planner/1placeholders/task_placeholder.dart';
 import 'package:planner/screens/auth_screen.dart';
 import 'package:planner/screens/calendar_screen.dart';
 import 'package:planner/screens/edit_event_dialog.dart';

@@ -11,6 +11,7 @@ class Task {
     required this.userId,
     required this.priorityId,
     required this.statusId,
+    this.tags
   });
 
   factory Task.fromMap(Map<String, dynamic> map) {
@@ -24,8 +25,6 @@ class Task {
       statusId: map['status_id'],
     );
   }
-
-  
 
   final int? id;
   String title;
@@ -46,16 +45,21 @@ class Task {
       'user_id': userId,
       'priority_id': priorityId,
       'status_id': statusId,
-
     };
   }
 
   Future<void> addTaskToDatabase(Database database) async {
-    print(dueDate);
-    await database.insert(
-      'task', 
-      toMap(), 
-    );
+    final taskId = await database.insert('task', toMap());
+    //print(taskId);
+    if (tags != null) {
+      for (final tag in tags!) {
+        //print("kek $tag.id:");
+        print("taskId $taskId");
+        final tgId = await database.insert('task_tag', {'task_id': taskId, 'tag_id': tag.id});
+        print("TgId $tgId");
+        print("TaskId $taskId");
+      }
+    }
   }
 
   static Future<List<Task>> getTasksFromDatabase(Database database) async {
@@ -65,6 +69,7 @@ class Task {
     INNER JOIN task_tag tt ON t.id = tt.task_id
     INNER JOIN tag tg ON tt.tag_id = tg.id
   ''');
+
 
   final tasks = <Task>[];
   for (final row in tasksData) {
@@ -81,5 +86,5 @@ class Task {
     }
 
   return tasks;
-}
+  }
 }

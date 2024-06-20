@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:planner/models/tag.dart';
 
 class CustomMultiDropdownList extends StatefulWidget { // Callback for selected tags
 
@@ -8,16 +9,16 @@ class CustomMultiDropdownList extends StatefulWidget { // Callback for selected 
     this.selectedTags = const [],
     required this.onSelected,
   });
-  final List<String> tags; // List of all available tags
-  final List<String> selectedTags; // Pre-selected tags (optional)
-  final Function(List<String>) onSelected;
+  final List<Tag> tags; // List of all available tags
+  final List<Tag> selectedTags; // Pre-selected tags (optional)
+  final Function(List<Tag>) onSelected;
 
   @override
   State<CustomMultiDropdownList> createState() => _CustomMultiDropdownListState();
 }
 
 class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
-  List<String> _selectedTags = [];
+  List<Tag> _selectedTags = [];
 
   @override
   void initState() {
@@ -25,7 +26,7 @@ class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
     _selectedTags = widget.selectedTags.toList();
   }
 
-  void _onItemSelected(String tag) {
+  void _onItemSelected(Tag tag) {
     setState(() {
       if (_selectedTags.contains(tag)) {
         _selectedTags.remove(tag);
@@ -38,14 +39,14 @@ class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
+    return DropdownButtonFormField<Tag>(
       hint: const Text('Select Tags'),
       isExpanded: true, // Occupy full width
       icon: const Icon(Icons.add),
       items: widget.tags
-          .map((tag) => DropdownMenuItem<String>(
+          .map((tag) => DropdownMenuItem<Tag>(
                 value: tag,
-                child: Text(tag),
+                child: Text(tag.title),
               ))
           .toList(),
       onChanged: (tag) => _onItemSelected(tag!),
@@ -57,7 +58,7 @@ class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
   }
 
   Widget _buildSelectedTags(BuildContext context) {
-    final selectedTagsText = _selectedTags.join(', '); // Join tags with comma
+    final selectedTagsText = _selectedTags.map((tag) => tag.title).join(', '); // Join tags with comma
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       decoration: BoxDecoration(

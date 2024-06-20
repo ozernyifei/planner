@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:planner/classes/db_helper.dart';
+import 'package:planner/models/tag.dart';
 import 'package:planner/models/task.dart';
 import 'package:planner/widgets/custom_multi_dropdown_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,14 +30,14 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   var unformattedDateString = '';
   
   final List<String> _priorityOptions = ['Низкий', 'Средний', 'Высокий'];
-  List<String> _selectedTags = []; // Or List<Tag> if using Tag class
+  List<Tag> _selectedTags = []; // Or List<Tag> if using Tag class
   final List<String> _urgentOptions = ['Низкая', 'Средняя', 'Высокая'];
   final List<String> _statusOptions = ['Низкий', 'Средний', 'Высокий'];
-  final _predefinedTags = {
-    'Учеба': 'Учеба', // Black for "учеба"
-    'Здоровье': 'Здоровье', // Green for "здоровье"
-    'Работа': Colors.amber, // Amber for "работа"
-  };
+  final _predefinedTags = [
+    Tag(id: 1, title: 'Учеба', color: Colors.black.value),
+    Tag(id: 2, title: 'Здоровье', color: Colors.green.value),
+    Tag(id: 3, title: 'Работа', color: Colors.amber.value),
+  ];
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dueDateController = TextEditingController();
@@ -100,11 +101,22 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
         task.dueDate = _dueDateController.text.isEmpty
         ? null
         : DateTime.parse(unformattedDateString); 
-
+              // Collect selected tags (assuming _selectedTags is a List<String>)
+        task.tags = _selectedTags;
+        if (task.title.isEmpty) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Введите название задачи'))); // Display SnackBar
+          }
+         return; // Exit the function if title is empty
+        }
+        print(task.title);
         await task.addTaskToDatabase(database);
         await database.close();
+
+        
         if (mounted) {
-          Navigator.pop(context);
+          Navigator.pop(context, task);
         }
       } else {
         // TODO(lebowskd):
@@ -263,47 +275,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               //         child: Text('Теги'),
               //       ),
               const SizedBox(height: 20),
-              // SizedBox(
-              //   height: 200,
-              //   width: 500,
-              //   child: Wrap(
-              //     spacing: 10,
-              //     runSpacing: 10, // Adjust vertical spacing between rows as needed
-              //     children: [
-              //       // Predefined tags
-              //       ..._predefinedTags.entries.map((entry) => CustomTag(
-              //         text: entry.key,
-              //         color: entry.value,
-              //         onDelete: () {
-              //           setState(() {
-              //             _selectedTags.remove(entry.key);
-              //           });
-              //         },
-              //       )),
-              //       // Selected tags
-              //       ..._selectedTags.map((tag) => CustomTag(
-              //       text: tag,
-              //       color: Colors.blue,
-              //       onDelete: () {
-              //         setState(() {
-              //           _selectedTags.remove(tag);
-              //         });
-              //       },
-              //      )),
-
-              //       // Add new tag
-              //       CustomTag(
-              //         text: 'Добавить',
-              //         color: Colors.grey[200]!,
-              //         onDelete: () {
-              //           // Implement logic to add a new tag
-              //         },
-              //       ),
-              //     ],
-              //   ),
-              // ),
               CustomMultiDropdownList(
-                tags: _predefinedTags.keys.toList(), // List of all tags (from map keys)
+                tags: _predefinedTags.toList(), // List of all tags (from map keys)
                 selectedTags: _selectedTags, // List of pre-selected tags
                 onSelected: (selectedTags) => setState(() {
                   _selectedTags = selectedTags;

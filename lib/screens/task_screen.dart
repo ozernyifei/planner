@@ -34,17 +34,6 @@ class _TaskScreenState extends State<TaskScreen> {
     }
   }
 
-
-  Future<void> _deleteTask(int taskId) async {
-  final dbHelper = DbHelper();
-  final database = await dbHelper.database;
-  await dbHelper.deleteTask(database, taskId);
-
-  setState(() {
-    tasks.removeWhere((task) => task.id == taskId);
-  });
-}
-
   @override
   void initState()  {
     super.initState();
@@ -60,30 +49,45 @@ class _TaskScreenState extends State<TaskScreen> {
         itemCount: tasks.length,
         itemBuilder: (context, index) {
           final task = tasks[index];
-          return TaskBox(task: task);
-          
+          return TaskBox(
+            task: task,
+            onDelete: _handleDeleteTask
+            ,);
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
+          final result = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const EditTaskScreen()),
           );
+
+          if (result != null) {
+            setState(() {
+              tasks.add(result);
+            });
+          }
         },
         child: const Icon(Icons.add),
       ),
     );
   }
+  Future<void> _handleDeleteTask(Task task) async {
+    final dbHelper = DbHelper();
+    final database = await dbHelper.database;
+    await dbHelper.deleteTask(database, task.id!);
+
+    setState(() {
+      tasks.remove(task);
+    });
+    
+    if (mounted) {
+      Navigator.pop(context);
+    }
+
+  }
 }
 
 // TODO(lebowskd): create edit task
 
-Future<void> _editTask(BuildContext context, Task task) async { 
-  await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => EditTaskScreen(task: task)
-              ),
-          );
-}
+

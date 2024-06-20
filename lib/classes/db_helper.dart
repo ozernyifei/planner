@@ -6,7 +6,7 @@ import 'package:planner/models/task.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DbHelper {
-  static String get _databaseName => 'taskPlanner1.db';
+  static String get _databaseName => 'test6.db';
 
   Database? _database;
 
@@ -43,7 +43,7 @@ class DbHelper {
     final eventsData = await database.rawQuery('''
       SELECT COUNT(*)
       FROM event
-      WHERE user_id = ? AND start_time >= ?
+      WHERE user_id = ? AND start_date >= ?
       ''', [userId, DateTime.now().toString()]);
 
     final count = eventsData.first['COUNT(*)']! as int;
@@ -61,6 +61,7 @@ class DbHelper {
     await _createTableTaskTag(database);
     await _createTableUserTag(database);
     await _createTableTag(database);
+    await _initTableTag(database);
     await _createTableUserData(database);
     await _createTableUserLogin(database);
     await _createTableEvent(database);
@@ -91,6 +92,19 @@ class DbHelper {
     Status(title: 'Заброшена', description: 'Задача была заброшена'),
   ];
 
+  Future<void> _initTableTag(Database database) async  {
+    final existingTag = await database.rawQuery('SELECT * FROM tag WHERE title = "Учеба"');
+    if (existingTag.isEmpty) {
+      await database.rawInsert('INSERT INTO tag(title, color) VALUES ("Учеба", 0x00000000)');
+    await database.rawInsert('INSERT INTO tag(title, color) VALUES ("Работа", 0xFFFFC000)');
+    await database.rawInsert('INSERT INTO tag(title, color) VALUES ("Здоровье", 0x00008000)');
+    }
+    else {
+      
+    }
+    
+  }
+
   Future<List<Event>> getEventsForUser(int userId) async {
     final db = await database;
     final events = await db.query('event',
@@ -114,9 +128,9 @@ class DbHelper {
       CREATE TABLE IF NOT EXISTS event (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
-        start_time TEXT NOT NULL,
-        end_time TEXT NOT NULL,
-        color INTEGER NOT NULL,
+        start_date TEXT NOT NULL,
+        end_date TEXT NOT NULL,
+        color INTEGER,
         is_all_day BOOL NOT NULL,
         user_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES user_data(id) ON DELETE CASCADE
@@ -144,14 +158,14 @@ class DbHelper {
   Future<void> _createTableStatus(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS status (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
+      title TEXT NOT NULL UNIQUE,
       description TEXT
     )
   ''');
   Future<void> _createTablePriority(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS priority (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
+      title TEXT NOT NULL UNIQUE,
       description TEXT
     )
   ''');
@@ -200,7 +214,7 @@ class DbHelper {
   Future<void> _createTableTag(Database database) async => database.execute('''
     CREATE TABLE IF NOT EXISTS tag (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
+      title TEXT NOT NULL UNIQUE,
       color TEXT NOT NULL
     )
   ''');

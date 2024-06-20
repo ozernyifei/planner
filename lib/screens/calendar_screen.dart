@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 
 class Event {
   Event(this.title);
-
   final String title;
 }
 
@@ -15,7 +15,6 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   final CalendarController _calendarController = CalendarController();
-  //final Map<DateTime, List<Event>> _events = {};
 
   @override
   void initState() {
@@ -31,10 +30,12 @@ class _CalendarScreenState extends State<CalendarScreen> {
         floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Нажмите на FAB, чтобы перейти к edit_task.dart
-          await Navigator.pushNamed(
+          final result = await Navigator.pushNamed(
             context,
             '/create-event',
           );
+          if (result != null) {
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -70,5 +71,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
         ),
       ),
     );
+  }
+}
+
+Future<CalendarView> loadCalendarView() async {
+  final prefs = await SharedPreferences.getInstance();
+  final storedCalendarViewString = prefs.getString('calendarView');
+  if (storedCalendarViewString != null) {
+    return CalendarView.values.firstWhere((mode) => mode.toString() == storedCalendarViewString);
+  }
+  else {
+    return CalendarView.week;
   }
 }
