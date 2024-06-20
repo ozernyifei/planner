@@ -48,8 +48,8 @@ class EventStat extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {
-              // Navigate to events screen here (replace with your logic)
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/events');
             },
             child: const Text('Перейти к событиям'),
           ),

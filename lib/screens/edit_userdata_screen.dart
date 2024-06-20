@@ -1,8 +1,8 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
-// import 'package:planner/classes/db_helper.dart';
-// import 'package:planner/widgets/show_error.dart';
-// import 'package:sqflite/sqflite.dart';
+import 'package:planner/classes/db_helper.dart';
+import 'package:planner/classes/user_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditUserdataScreen extends StatefulWidget {
   @override
@@ -15,6 +15,12 @@ class _EditUserdataScreenState extends State<EditUserdataScreen> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  
+  void initState() {
+    super.initState();
+    setEmailFromSharedPreferences(_emailController); // Replace emailController with your actual instance
+  }
+  
 
   @override
   void dispose() {
@@ -88,10 +94,10 @@ class _EditUserdataScreenState extends State<EditUserdataScreen> {
                       ),
                       
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.isEmpty || value == '') {
                         return 'Введите пароль';
                       }
-                      if (value.length < 6) {
+                      else if (value.length < 6) {
                         return 'Пароль должен быть не менее 6 символов';
                       }
                       return null;
@@ -101,6 +107,9 @@ class _EditUserdataScreenState extends State<EditUserdataScreen> {
                   // Registration button
                   ElevatedButton(
                     onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                      await changePassword(_passwordController.text);
+                    }
                     },
                     child: const Text('Сохранить'),
                   ),
@@ -111,5 +120,40 @@ class _EditUserdataScreenState extends State<EditUserdataScreen> {
         ),
       ),
     );
+    
+  }
+
+  Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_id');
+    await prefs.remove('username');
+    await prefs.remove('token');
+    await prefs.remove('timestamp');
+
+    // Navigate to AuthScreen
+    if (mounted) {
+      await Navigator.pushReplacementNamed(context, '/auth');
+    } 
+  }
+    Future<void> changePassword(String newPassword) async {
+    final userId = await UserService.fetchUserId();
+    final dbHelper = DbHelper();
+    final db = await dbHelper.database;
+
+    await db.update('user_login', {'password': newPassword}, where: 'id = ?', whereArgs: [userId]);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Password updated successfully.')),
+     );
+    }
+    await logout();
+  }
+}
+
+Future<void> setEmailFromSharedPreferences(TextEditingController emailController) async {
+  final userEmail = await UserService.getUserEmail();
+  if (userEmail != null) {
+    emailController.text = userEmail;
   }
 }

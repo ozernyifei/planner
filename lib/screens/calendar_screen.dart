@@ -48,6 +48,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
             '/create-event',
           );
           if (result != null) {
+            final newEvent = result as Event;
+            setState(() {
+              _eventList.add(newEvent);
+            });
           }
         },
         child: const Icon(Icons.add),
@@ -58,7 +62,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             SfCalendar(
               
               controller: _calendarController,
-              view: CalendarView.week,
+              view: CalendarView.month,
               firstDayOfWeek: 1, 
               monthViewSettings: const MonthViewSettings(
                 numberOfWeeksInView: 5,

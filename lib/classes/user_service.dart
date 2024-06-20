@@ -91,4 +91,30 @@ class UserService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('user_id')!;
   }
+
+  static Future<String?> getUserEmail() async {
+  final dbHelper = DbHelper();
+  final database = await dbHelper.database;
+  final prefs = await SharedPreferences.getInstance();
+  final userId = prefs.getInt('userId');
+
+  if (userId == null) {
+    return null; // Handle case where userId is not found in SharedPreferences
+  }
+
+  final List<Map<String, dynamic>> maps = await database.query(
+    'user_data', // Replace 'users' with your actual table name
+    columns: ['email'], // Select only the 'email' column
+    where: 'user_id = ?', // Filter by 'id' column
+    whereArgs: [userId], // Use the retrieved userId as the argument
+  );
+
+  if (maps.isEmpty) {
+    return null; // Handle case where no user found with the userId
+  }
+
+  final user = maps.first;
+  return user['email'] as String;
+}
+
 }

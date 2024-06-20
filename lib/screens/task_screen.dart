@@ -44,6 +44,9 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ваши задачи'),
+      ),
        body: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
@@ -75,7 +78,10 @@ class _TaskScreenState extends State<TaskScreen> {
   Future<void> _handleDeleteTask(Task task) async {
     final dbHelper = DbHelper();
     final database = await dbHelper.database;
-    await dbHelper.deleteTask(database, task.id!);
+    if (task.id != null) {
+      await dbHelper.deleteTask(database, task.id!);
+    }
+
 
     setState(() {
       tasks.remove(task);

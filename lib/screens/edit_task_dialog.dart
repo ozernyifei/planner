@@ -33,11 +33,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
   List<Tag> _selectedTags = []; // Or List<Tag> if using Tag class
   final List<String> _urgentOptions = ['Низкая', 'Средняя', 'Высокая'];
   final List<String> _statusOptions = ['Низкий', 'Средний', 'Высокий'];
-  final _predefinedTags = [
-    Tag(id: 1, title: 'Учеба', color: Colors.black.value),
-    Tag(id: 2, title: 'Здоровье', color: Colors.green.value),
-    Tag(id: 3, title: 'Работа', color: Colors.amber.value),
-  ];
+  // final _predefinedTags = [
+  //   Tag(id: 1, title: 'Учеба', color: Colors.black.value),
+  //   Tag(id: 2, title: 'Здоровье', color: Colors.green.value),
+  //   Tag(id: 3, title: 'Работа', color: Colors.amber.value),
+  // ];
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _dueDateController = TextEditingController();
@@ -268,6 +268,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                     // Status Dropdown
                   Align(
                     child: DropdownButton<String>(
+                      
                       value: _selectedStatus,
                       items: _statusOptions.map((value) {
                         return DropdownMenuItem<String>(
@@ -295,8 +296,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
               //       ),
               const SizedBox(height: 20),
               CustomMultiDropdownList(
-                tags: _predefinedTags.toList(), // List of all tags (from map keys)
+                // tags: _predefinedTags.toList(), // List of all tags (from map keys)
+                tags: [],
                 selectedTags: _selectedTags, // List of pre-selected tags
+                // onSelected: (selectedTags) => setState(() {
+                //   _selectedTags = selectedTags;
+                // }),
                 onSelected: (selectedTags) => setState(() {
                   _selectedTags = selectedTags;
                 }),
