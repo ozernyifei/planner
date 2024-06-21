@@ -138,7 +138,7 @@ class _RegScreenState extends State<RegScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Введите email';
                       }
-                      if (!RegExp(r'^[\w-]+@\w+\.[a-z]{2,}$').hasMatch(value)) {
+                      if (!RegExp(r'^[\.\w-]+@\w+\.[a-z]{2,}$').hasMatch(value)) {
                         return 'Неверный формат email';
                       }
                       return null;
