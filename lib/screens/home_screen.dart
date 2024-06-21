@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (taskCount == 0) Icon(
+            if (taskCount == 9999) Icon(
               Icons.assignment_outlined,
               size: 80,
               color: Colors.grey[400],
