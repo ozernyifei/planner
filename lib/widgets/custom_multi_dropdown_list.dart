@@ -40,7 +40,7 @@ class _CustomMultiDropdownListState extends State<CustomMultiDropdownList> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<Tag>(
-      hint: const Text('Select Tags'),
+      hint: const Text('Выберите тег'),
       isExpanded: true, // Occupy full width
       icon: const Icon(Icons.add),
       items: widget.tags
